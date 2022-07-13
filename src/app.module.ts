@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ResearchesModule } from './modules/researches/researches.module';
+import { SourceRegistersModule } from './modules/source-registers/source-registers.module';
+import { CsvModule } from './modules/csv/csv.module';
 
 @Module({
   imports: [
@@ -13,8 +15,8 @@ import { ResearchesModule } from './modules/researches/researches.module';
       port: 1433,
       username: 'sa',
       password: 'mssql1Ipw',
-      //database: 'test',
-      //entities: ['dist/**/*.entity{.ts,.js}'],
+      // database: 'test',
+      // entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
       extra: {
@@ -24,6 +26,8 @@ import { ResearchesModule } from './modules/researches/researches.module';
     }),
     UsersModule,
     ResearchesModule,
+    SourceRegistersModule,
+    CsvModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,41 @@
+export interface ResearchInterface {
+  trialID: string;
+  lastRefreshedOn: Date;
+  publicTitle: string;
+  scientificTitle?: string;
+  acronym?: string;
+  primarySponsor?: string;
+  dateRegistration?: Date;
+  sourceRegister?: string;
+  webAddress: string;
+  recruitmentStatus?: string;
+  otherRecords: boolean;
+  inclusionAgeMin?: string;
+  inclusionAgeMax?: string;
+  inclusionGender?: string;
+  dateEnrollement?: Date;
+  targetSize?: string;
+  studyType: string;
+  studyDesign?: string;
+  phase?: string;
+  countries?: string;
+  contactFirstname?: string;
+  contactLastname?: string;
+  contactAddress?: string;
+  contactEmail?: string;
+  contactTel?: string;
+  contactAffiliation?: string;
+  inclusionCriteria?: string;
+  exclusionCriteria?: string;
+  condition?: string;
+  intervention?: string;
+  primaryOutcome?: string;
+  secondaryOutcome?: string;
+  resultsDatePosted?: Date;
+  resultsDateCompleted?: Date;
+  resultsUrlLink?: string;
+  retrospectiveFlag: boolean;
+  bridgingFlag: boolean;
+  bridgedType: boolean; //true: "parent"
+  results: boolean;
+}
