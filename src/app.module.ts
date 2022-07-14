@@ -19,8 +19,8 @@ import { StudyTypesModule } from './modules/study-types/study-types.module';
       port: 1433,
       username: 'sa',
       password: 'mssql1Ipw',
-      database: 'test',
-      entities: ['dist/**/*.entity{.ts,.js}'],
+      // database: 'test',
+      // entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
       extra: {
