@@ -10,7 +10,6 @@ import {
 import { SourceRegistersService } from './source-registers.service';
 import { CreateSourceRegisterDto } from './dto/create-source-register.dto';
 import { UpdateSourceRegisterDto } from './dto/update-source-register.dto';
-import { identity } from 'rxjs';
 
 @Controller('source-registers')
 export class SourceRegistersController {

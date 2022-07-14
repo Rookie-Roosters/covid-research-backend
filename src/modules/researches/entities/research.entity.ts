@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { RecruitmentStatus } from 'src/modules/recruitment-statuses/entities/recruitment-status.entity';
+import { SourceRegister } from 'src/modules/source-registers/entities/source-register.entity';
+import { StudyType } from 'src/modules/study-types/entities/study-type.entity';
+import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Research {
@@ -23,12 +26,22 @@ export class Research {
   @Column({ type: Date, nullable: true })
   dateRegistration?: Date;
 
-  //sourceRegister?: string
+  @ManyToOne(() => SourceRegister, (sourceRegister) => sourceRegister.id, {
+    nullable: true,
+  })
+  sourceRegister?: number;
 
   @Column({ type: String, length: 128 })
   webAddress: string;
 
-  // recruitmentStatus?: string
+  @ManyToOne(
+    () => RecruitmentStatus,
+    (recruitmentStatus) => recruitmentStatus.id,
+    {
+      nullable: true,
+    },
+  )
+  recruitmentStatus?: number;
 
   @Column({ type: Boolean })
   otherRecords: boolean;
@@ -37,14 +50,16 @@ export class Research {
 
   // inclusionAgeMax?: string
 
-  // inclusionGender?: string
+  @Column({ type: String, length: 6, nullable: true })
+  inclusionGender?: 'Both' | 'Male' | 'Female';
 
   @Column({ type: Date, nullable: true })
   dateEnrollement?: Date;
 
   // targetSize?: string
 
-  // studyType: string
+  @ManyToOne(() => StudyType, (studyType) => studyType.id)
+  studyType: number;
 
   @Column({ type: String, length: 1024, nullable: true })
   studyDesign?: string;

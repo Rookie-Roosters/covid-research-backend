@@ -9,29 +9,38 @@ import { SourceRegister } from './entities/source-register.entity';
 export class SourceRegistersService {
   constructor(
     @InjectRepository(SourceRegister)
-    private sourceRegister: Repository<SourceRegister>,
+    private sourceRegisterRepository: Repository<SourceRegister>,
   ) {}
 
-  async create(createSourceRegisterDto: CreateSourceRegisterDto) {
-    return await this.sourceRegister.save(createSourceRegisterDto);
+  async create(
+    createSourceRegisterDto: CreateSourceRegisterDto,
+  ): Promise<SourceRegister> {
+    return await this.sourceRegisterRepository.save(createSourceRegisterDto);
   }
 
-  async findAll() {
-    return await this.sourceRegister.find();
+  async findAll(): Promise<SourceRegister[]> {
+    return await this.sourceRegisterRepository.find();
   }
 
-  async findOne(id: number) {
-    return await this.sourceRegister.findOneBy({ id: id });
+  async findOne(id: number): Promise<SourceRegister> {
+    return await this.sourceRegisterRepository.findOneBy({ id });
+  }
+
+  async findByValue(value: string): Promise<SourceRegister> {
+    return await this.sourceRegisterRepository
+      .createQueryBuilder()
+      .where('LOWER(value) = LOWER(:value)', { value })
+      .getOne();
   }
 
   async update(id: number, updateSourceRegisterDto: UpdateSourceRegisterDto) {
-    return await this.sourceRegister.update(
-      { id: id },
+    return await this.sourceRegisterRepository.update(
+      { id },
       updateSourceRegisterDto,
     );
   }
 
   async remove(id: number) {
-    return await this.sourceRegister.delete({ id: id });
+    return await this.sourceRegisterRepository.delete({ id });
   }
 }

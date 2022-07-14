@@ -39,26 +39,26 @@ export class ResearchesController {
     return await this.researchesService.create(createResearchDto);
   }
 
-  @Get()
-  async findAll() {
-    return await this.researchesService.findAll();
-  }
+  // @Get()
+  // async findAll() {
+  //   return await this.researchesService.findAll();
+  // }
 
-  @Get(':trialID')
-  async findOne(@Param('trialID') trialID: string) {
-    return await this.researchesService.findOne(trialID);
-  }
+  // @Get(':trialID')
+  // async findOne(@Param('trialID') trialID: string) {
+  //   return await this.researchesService.findOne(trialID);
+  // }
 
-  @Put(':trialID')
-  async update(
-    @Param('trialID') trialID: string,
-    @Body() updateResearchDto: UpdateResearchDto,
-  ) {
-    return await this.researchesService.update(trialID, updateResearchDto);
-  }
+  // @Put(':trialID')
+  // async update(
+  //   @Param('trialID') trialID: string,
+  //   @Body() updateResearchDto: UpdateResearchDto,
+  // ) {
+  //   return await this.researchesService.update(trialID, updateResearchDto);
+  // }
 
-  @Delete(':trialID')
-  async remove(@Param('trialID') trialID: string) {
-    return await this.researchesService.remove(trialID);
-  }
+  // @Delete(':trialID')
+  // async remove(@Param('trialID') trialID: string) {
+  //   return await this.researchesService.remove(trialID);
+  // }
 }

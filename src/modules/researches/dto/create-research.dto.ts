@@ -1,10 +1,16 @@
+import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsBoolean,
   IsDateString,
   IsDefined,
+  IsIn,
+  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
+  Min,
+  ValidateNested,
 } from 'class-validator';
 
 export class CreateResearchDto {
@@ -41,14 +47,20 @@ export class CreateResearchDto {
   @IsDateString()
   dateRegistration?: Date;
 
-  // sourceRegister?: string;
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  sourceRegister?: string;
 
   @IsDefined()
   @IsString()
   @MaxLength(256)
   webAddress: string;
 
-  // recruitmentStatus?: string;
+  @IsOptional()
+  @IsString()
+  @MaxLength(32)
+  recruitmentStatus?: string;
 
   @IsDefined()
   @IsBoolean()
@@ -58,15 +70,24 @@ export class CreateResearchDto {
 
   // inclusionAgeMax?: string;
 
-  // inclusionGender?: string;
+  @IsOptional()
+  @IsString()
+  @IsIn(['Both', 'Male', 'Female'])
+  inclusionGender?: 'Both' | 'Male' | 'Female';
 
   @IsOptional()
   @IsDateString()
   dateEnrollement?: Date;
 
-  // targetSize?: string;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => TargetSizeValidator)
+  targetSize: { group?: string; count?: number }[];
 
-  // studyType: string;
+  @IsDefined()
+  @IsString()
+  @MaxLength(64)
+  studyType: string;
 
   @IsOptional()
   @IsString()
@@ -165,4 +186,16 @@ export class CreateResearchDto {
   @IsBoolean()
   @IsDefined()
   results: boolean;
+}
+
+class TargetSizeValidator {
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  group: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  count: number;
 }

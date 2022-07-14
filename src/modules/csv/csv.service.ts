@@ -19,18 +19,18 @@ export class CsvService {
         dateRegistration: this.getDateFromSlashDateNull(
           row['Date registration'],
         ),
-        sourceRegister: '',
+        sourceRegister: this.getProcessedStringNull(row['Source Register']), //relationship column
         webAddress: this.getProcessedString(row['web address']),
-        recruitmentStatus: '',
+        recruitmentStatus: this.getProcessedString(row['Recruitment Status']), //relationship column
         otherRecords: this.getBoolFromYesNo(row['other records']),
         inclusionAgeMin: '',
         inclusionAgeMax: '',
-        inclusionGender: '',
+        inclusionGender: this.getCharFromGenderNull(row['Inclusion gender']),
         dateEnrollement: this.getDateFromSlashDateNull(
           row['Date enrollemente'],
         ),
-        targetSize: '',
-        studyType: '',
+        targetSize: this.getTargetSize(row['Target size']), //relationship column
+        studyType: this.getStudyType(row['Study type']), //relationship column
         studyDesign: this.getProcessedStringNull(row['Study design']),
         phase: '',
         countries: '',
@@ -65,6 +65,98 @@ export class CsvService {
         results: this.getBoolFromYesNo(row['results yes no']),
       };
       return a;
+    }
+    return undefined;
+  }
+
+  private getStudyType(value: string) {
+    value = value.replace('study', '');
+    value = value.replace('Study', '');
+    return this.getProcessedString(value);
+  }
+
+  private getTargetSize(value: string): {
+    group?: string;
+    count?: number;
+  }[] {
+    let targetSize: {
+      group?: string;
+      count?: number;
+    }[] = [];
+
+    value = this.getProcessedStringNull(value);
+    if (value) {
+      if (/^[0-9]*$/.test(value)) {
+        targetSize.push({ count: +value });
+      } else {
+        let values = value.split(';');
+        if (values[values.length - 1] == '') values.pop();
+        for (let v of values) {
+          let res = v.match(/:\ {0,1}\d+/);
+          if (res) {
+            targetSize.push({
+              group: v.substring(0, res.index),
+              count: +res[0].match(/\d+/)[0],
+            });
+          } else {
+            res = v.match(/^\d+\ /);
+            if (res) {
+              targetSize.push({
+                group: v.substring(res[0].length, v.length),
+                count: +res[0].match(/\d+/)[0],
+              });
+            } else {
+              targetSize.push({ group: v });
+            }
+          }
+        }
+      }
+    }
+    return targetSize;
+  }
+
+  private getCharFromGenderNull(
+    value: string,
+  ): 'Male' | 'Female' | 'Both' | undefined {
+    if (value) {
+      value = this.getProcessedString(value).toLowerCase();
+      if (
+        value.search('all') != -1 ||
+        value.search('both') != -1 ||
+        value == 'b' ||
+        value.search('male and female') != -1 ||
+        value.search('female and male') != -1 ||
+        value.search('males and females') != -1 ||
+        value.search('females and males') != -1 ||
+        value.search('male/female') != -1 ||
+        value.search('female/male') != -1 ||
+        (value.search('male: yes') != -1 && value.search('female: yes') != -1)
+      )
+        return 'Both';
+      else if (
+        value.search('male: no') != -1 &&
+        value.search('female: yes') != -1
+      )
+        return 'Female';
+      else if (
+        value.search('male: yes') != -1 &&
+        value.search('female: no') != -1
+      )
+        return 'Male';
+      else if (
+        value.search('female') != -1 ||
+        value.search('females') != -1 ||
+        value.search('female: yes') != -1 ||
+        value == 'f'
+      )
+        return 'Female';
+      else if (
+        value.search('male') != -1 ||
+        value.search('males') != -1 ||
+        value.search('male: yes') != -1 ||
+        value == 'm'
+      )
+        return 'Male';
     }
     return undefined;
   }
@@ -167,6 +259,8 @@ export class CsvService {
     return new Promise((resolve, reject) => {
       const data: ResearchInterface[] = [];
 
+      let count = 0;
+
       parseFile(path, {
         delimiter: ',',
         headers: true,
@@ -174,8 +268,11 @@ export class CsvService {
       })
         .on('error', reject)
         .on('data', (row) => {
-          const obj = this.rowProcessor(row);
-          if (obj) data.push(obj);
+          if (count < 100) {
+            const obj = this.rowProcessor(row);
+            if (obj) data.push(obj);
+            count++;
+          }
         })
         .on('end', () => {
           resolve(data);

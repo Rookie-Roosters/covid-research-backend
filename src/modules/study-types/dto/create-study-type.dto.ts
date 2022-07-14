@@ -1,6 +1,6 @@
 import { IsDefined, IsString, MaxLength } from 'class-validator';
 
-export class CreateSourceRegisterDto {
+export class CreateStudyTypeDto {
   @IsDefined()
   @IsString()
   @MaxLength(64)

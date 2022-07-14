@@ -12,9 +12,9 @@ export interface ResearchInterface {
   otherRecords: boolean;
   inclusionAgeMin?: string;
   inclusionAgeMax?: string;
-  inclusionGender?: string;
+  inclusionGender?: 'Both' | 'Male' | 'Female';
   dateEnrollement?: Date;
-  targetSize?: string;
+  targetSize: { group?: string; count?: number }[];
   studyType: string;
   studyDesign?: string;
   phase?: string;
