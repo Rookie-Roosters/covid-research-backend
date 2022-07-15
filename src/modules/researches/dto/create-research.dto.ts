@@ -11,7 +11,6 @@ import {
   Max,
   MaxLength,
   Min,
-  Validate,
   ValidateNested,
 } from 'class-validator';
 

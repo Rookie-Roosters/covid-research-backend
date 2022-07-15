@@ -463,7 +463,7 @@ export class CsvService {
       })
         .on('error', reject)
         .on('data', (row) => {
-          if (count < 17000) {
+          if (count < 10) {
             const obj = this.rowProcessor(row);
             if (obj) data.push(obj);
             count++;
