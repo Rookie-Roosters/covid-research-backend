@@ -1,47 +1,64 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Post,
+  Put,
 } from '@nestjs/common';
 import { ResearchesService } from './researches.service';
 import { CreateResearchDto } from './dto/create-research.dto';
-import { UpdateResearchDto } from './dto/update-research.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { UpdateResearchDto } from './dto/update-research.dto';
+import { CsvService } from '../csv/csv.service';
+import { join } from 'path';
+import { ResearchInterface } from './interfaces/researches.interface';
 
 @ApiTags('Researches')
 @Controller('researches')
 export class ResearchesController {
-  constructor(private readonly researchesService: ResearchesService) {}
+  constructor(
+    private readonly researchesService: ResearchesService,
+    private readonly csvService: CsvService,
+  ) {}
+
+  @Get('csv')
+  async csv() {
+    var data: ResearchInterface[] = await this.csvService.getData(
+      join(__dirname, '..', 'src/modules/csv/assets/IctrpResults.csv'),
+    );
+    for (var d of data) {
+      await this.researchesService.create(d);
+    }
+    return 'Datos agregados correctamente';
+  }
 
   @Post()
-  create(@Body() createResearchDto: CreateResearchDto) {
-    return this.researchesService.create(createResearchDto);
+  async create(@Body() createResearchDto: CreateResearchDto) {
+    return await this.researchesService.create(createResearchDto);
   }
 
-  @Get()
-  findAll() {
-    return this.researchesService.findAll();
-  }
+  // @Get()
+  // async findAll() {
+  //   return await this.researchesService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.researchesService.findOne(+id);
-  }
+  // @Get(':trialID')
+  // async findOne(@Param('trialID') trialID: string) {
+  //   return await this.researchesService.findOne(trialID);
+  // }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateResearchDto: UpdateResearchDto,
-  ) {
-    return this.researchesService.update(+id, updateResearchDto);
-  }
+  // @Put(':trialID')
+  // async update(
+  //   @Param('trialID') trialID: string,
+  //   @Body() updateResearchDto: UpdateResearchDto,
+  // ) {
+  //   return await this.researchesService.update(trialID, updateResearchDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.researchesService.remove(+id);
-  }
+  // @Delete(':trialID')
+  // async remove(@Param('trialID') trialID: string) {
+  //   return await this.researchesService.remove(trialID);
+  // }
 }
