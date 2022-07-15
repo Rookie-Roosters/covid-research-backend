@@ -1,31 +1,35 @@
 import { Module } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './modules/users/users.module';
-import { ResearchesModule } from './modules/researches/researches.module';
+
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseService } from '@config/database';
+import { BookmarksModule } from '@bookmarks/bookmarks.module';
+import { SearchesModule } from '@searches/searches.module';
+import { ResearchesModule } from '@researches/researches.module';
+import { UsersModule } from '@users/users.module';
+import { HttpExceptionFilter } from '@utils/filters';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      type: 'mssql',
-      host: 'localhost',
-      port: 1433,
-      username: 'sa',
-      password: 'mssql1Ipw',
-      //database: 'test',
-      //entities: ['dist/**/*.entity{.ts,.js}'],
-      autoLoadEntities: true,
-      synchronize: true,
-      extra: {
-        trustServerCertificate: true,
-      },
-      //ustServerCertificate: true,
-    }),
-    UsersModule,
-    ResearchesModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+        }),
+        TypeOrmModule.forRootAsync({
+            useClass: DatabaseService,
+        }),
+        ResearchesModule,
+        UsersModule,
+        BookmarksModule,
+        SearchesModule,
+        SharedModule,
+    ],
+    providers: [
+        {
+            provide: APP_FILTER,
+            useClass: HttpExceptionFilter,
+        },
+    ],
 })
 export class AppModule {}
