@@ -16,10 +16,10 @@ export class CreateTargetSizeDto {
   @IsOptional()
   @IsString()
   @MaxLength(64)
-  targetSizeGroup: string;
+  targetSizeGroup?: string;
 
   @IsOptional()
   @IsNumber()
   @Min(0)
-  count: number;
+  count?: number;
 }

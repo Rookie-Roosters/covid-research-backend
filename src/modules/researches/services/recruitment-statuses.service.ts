@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateRecruitmentStatusDto } from './dto/create-recruitment-status.dto';
-import { UpdateRecruitmentStatusDto } from './dto/update-recruitment-status.dto';
-import { RecruitmentStatus } from './entities/recruitment-status.entity';
+import { CreateRecruitmentStatusDto } from '../dto/create-recruitment-status.dto';
+import { RecruitmentStatus } from '../entities/recruitment-status.entity';
 
 @Injectable()
 export class RecruitmentStatusesService {
@@ -12,12 +11,13 @@ export class RecruitmentStatusesService {
     private recruitmentStatusRepository: Repository<RecruitmentStatus>,
   ) {}
 
-  async create(
-    createRecruitmentStatusDto: CreateRecruitmentStatusDto,
-  ): Promise<RecruitmentStatus> {
-    return await this.recruitmentStatusRepository.save(
-      createRecruitmentStatusDto,
-    );
+  async create(createRecruitmentStatusDto: CreateRecruitmentStatusDto) : Promise<RecruitmentStatus> {
+    let recruitmentStatus: RecruitmentStatus = await this.findByValue(createRecruitmentStatusDto.value);
+    if(!recruitmentStatus) {
+      createRecruitmentStatusDto.value = createRecruitmentStatusDto.value.toLowerCase();
+      recruitmentStatus = await this.recruitmentStatusRepository.save(createRecruitmentStatusDto);
+    }
+    return recruitmentStatus;
   }
 
   async findAll(): Promise<RecruitmentStatus[]> {
@@ -33,19 +33,5 @@ export class RecruitmentStatusesService {
       .createQueryBuilder()
       .where('LOWER(value) = LOWER(:value)', { value })
       .getOne();
-  }
-
-  async update(
-    id: number,
-    updateRecruitmentStatusDto: UpdateRecruitmentStatusDto,
-  ) {
-    return await this.recruitmentStatusRepository.update(
-      { id },
-      updateRecruitmentStatusDto,
-    );
-  }
-
-  async remove(id: number) {
-    return await this.recruitmentStatusRepository.delete({ id });
   }
 }

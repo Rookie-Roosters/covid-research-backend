@@ -4,11 +4,14 @@ import { parseFile } from 'fast-csv';
 
 @Injectable()
 export class CsvService {
-  private rowProcessor(row: object): ResearchInterface | undefined {
+  rowProcessor(row: object): ResearchInterface | undefined {
     if (
       row['Date registration3'].length <= 10 &&
       row['web address'].length <= 150
     ) {
+      const ageMin = this.getAgeNull(row['Inclusion agemin']);
+      const ageMax = this.getAgeNull(row['Inclusion agemax']);
+
       const a: ResearchInterface = {
         trialID: this.getProcessedString(row['TrialID']),
         lastRefreshedOn: this.getDateFromWordDate(row['Last Refreshed on']),
@@ -23,8 +26,10 @@ export class CsvService {
         webAddress: this.getProcessedString(row['web address']),
         recruitmentStatus: this.getProcessedString(row['Recruitment Status']), //relationship column
         otherRecords: this.getBoolFromYesNo(row['other records']),
-        inclusionAgeMin: '',
-        inclusionAgeMax: '',
+        inclusionAgeMin: ageMin ? ageMin.age : undefined,
+        inclusionAgeMinType: ageMin ? ageMin.type : undefined,
+        inclusionAgeMax: ageMax ? ageMax.age : undefined,
+        inclusionAgeMaxType: ageMax ? ageMax.type : undefined,
         inclusionGender: this.getCharFromGenderNull(row['Inclusion gender']),
         dateEnrollement: this.getDateFromSlashDateNull(
           row['Date enrollemente'],
@@ -32,7 +37,7 @@ export class CsvService {
         targetSize: this.getTargetSize(row['Target size']), //relationship column
         studyType: this.getStudyType(row['Study type']), //relationship column
         studyDesign: this.getProcessedStringNull(row['Study design']),
-        phase: '',
+        phase: this.transformPhaseNull(row['Phase']), //relationship column
         countries: '',
         contactFirstname: this.getProcessedStringNull(row['Contact Firstname']),
         contactLastname: this.getProcessedStringNull(row['Contact Lastname']),
@@ -69,13 +74,200 @@ export class CsvService {
     return undefined;
   }
 
-  private getStudyType(value: string) {
+  getAgeNull(value: string):
+    | {
+        age?: number;
+        type:
+          | 'years'
+          | 'months'
+          | 'weeks'
+          | 'weeks of pregnacy'
+          | 'days'
+          | 'hours'
+          | 'minutes'
+          | 'no limit';
+      }
+    | undefined {
+    if (value) {
+      value = this.getProcessedString(value).toLowerCase();
+      if (/^[0-9]*$/.test(value)) {
+        return {
+          age: +value,
+          type: 'years',
+        };
+      } else if (
+        (/year/.test(value) ||
+          /^[0-9]+\ {0,1}y$/.test(value) ||
+          /age old/.test(value) ||
+          /^=[0-9]+$/.test(value)) &&
+        /[0-9]+/.test(value)
+      ) {
+        return {
+          age: +value.match(/[0-9]+/)[0],
+          type: 'years',
+        };
+      } else if (/weeks of pregnancy/.test(value) && /[0-9]+/.test(value)) {
+        return {
+          age: +value.match(/[0-9]+/)[0],
+          type: 'weeks of pregnacy',
+        };
+      } else if (
+        (/month/.test(value) || /^[0-9]+\ {0,1}m$/.test(value)) &&
+        /[0-9]+/.test(value)
+      ) {
+        return {
+          age: +value.match(/[0-9]+/)[0],
+          type: 'months',
+        };
+      } else if (
+        (/week/.test(value) || /^[0-9]+\ {0,1}w$/.test(value)) &&
+        /[0-9]+/.test(value)
+      ) {
+        return {
+          age: +value.match(/[0-9]+/)[0],
+          type: 'weeks',
+        };
+      } else if (
+        (/day/.test(value) || /^[0-9]+\ {0,1}d$/.test(value)) &&
+        /[0-9]+/.test(value)
+      ) {
+        return {
+          age: +value.match(/[0-9]+/)[0],
+          type: 'days',
+        };
+      } else if (
+        (/hour/.test(value) || /^[0-9]+\ {0,1}h$/.test(value)) &&
+        /[0-9]+/.test(value)
+      ) {
+        return {
+          age: +value.match(/[0-9]+/)[0],
+          type: 'hours',
+        };
+      } else if (/minute/.test(value) && /[0-9]+/.test(value)) {
+        return {
+          age: +value.match(/[0-9]+/)[0],
+          type: 'minutes',
+        };
+      } else if (/no limit/.test(value)) {
+        return {
+          type: 'no limit',
+        };
+      }
+    }
+    return undefined;
+  }
+
+  transformPhaseNull(value: string): string | undefined {
+    if (value) {
+      value = this.getProcessedString(value).toLowerCase();
+      if (value == 'n/a' || value == 'na' || value == 'not applicable') {
+        return 'not applicable';
+      } else if (/^phase\ {0,1}-{0,1}\d$/.test(value)) {
+        return 'phase ' + value.match(/\d/)[0];
+      } else if (/^\d$/.test(value)) {
+        return 'phase ' + value;
+      } else if (
+        /phase\ {0,1}\d\ {0,1}\/\ {0,1}phase\ {0,1}\d\ {0,1}/.test(value)
+      ) {
+        const values = value.split('/');
+        let a = +values[0].match(/\d/)[0];
+        let b = +values[1].match(/\d/)[0];
+        if (b == a) return 'phase ' + a;
+        if (b < a) return 'phase ' + b + ', phase ' + a;
+        return 'phase ' + a + ', phase ' + b;
+      } else if (
+        /human pharmacology \(phase i\): (yes|no) therapeutic exploratory \(phase ii\): (yes|no) therapeutic confirmatory - \(phase iii\): (yes|no) therapeutic use \(phase iv\): (yes|no)/.test(
+          value,
+        )
+      ) {
+        const p1 = value.match(/\(phase i\): (yes|no)/)[0].match(/(yes|no)/)[0];
+        const p2 = value
+          .match(/\(phase ii\): (yes|no)/)[0]
+          .match(/(yes|no)/)[0];
+        const p3 = value
+          .match(/\(phase iii\): (yes|no)/)[0]
+          .match(/(yes|no)/)[0];
+        const p4 = value
+          .match(/\(phase iv\): (yes|no)/)[0]
+          .match(/(yes|no)/)[0];
+        value = '';
+        if (p1 == 'yes') value = value + 'phase 1, ';
+        if (p2 == 'yes') value = value + 'phase 2, ';
+        if (p3 == 'yes') value = value + 'phase 3, ';
+        if (p4 == 'yes') value = value + 'phase 4, ';
+        return value.slice(0, -2);
+      } else if (/human pharmacology/.test(value)) {
+        return undefined;
+      } else if (/^i{1,3}v{0,1}$/.test(value)) {
+        return 'phase ' + this.romanToNumber(value);
+      } else if (/^phase i{1,3}v{0,1}$/.test(value)) {
+        return 'phase ' + this.romanToNumber(value.match(/i{1,3}v{0,1}/)[0]);
+      } else if (/\d-\d/.test(value)) {
+        const values = value.split('-');
+        let a = +values[0].match(/\d/)[0];
+        let b = +values[1].match(/\d/)[0];
+        if (b < a) {
+          const c = a;
+          a = b;
+          b = c;
+        }
+        value = '';
+        for (let i = a; i <= b; i++) {
+          value = value + `phase ${i}, `;
+        }
+        return value.slice(0, -2);
+      } else if (/i{1,3}v{0,1}(\/|,)i{1,3}v{0,1}/.test(value)) {
+        const values = value.split(/\//.test(value) ? '/' : ',');
+        let a = this.romanToNumber(values[0].match(/i{1,3}v{0,1}/)[0]);
+        let b = this.romanToNumber(values[1].match(/i{1,3}v{0,1}/)[0]);
+        if (b == a) return 'phase ' + a;
+        if (b < a) return 'phase ' + b + ', phase ' + a;
+        return 'phase ' + a + ', phase ' + b;
+      } else if (/i{1,3}v{0,1}-i{1,3}v{0,1}/.test(value)) {
+        const values = value.split('-');
+        let a = this.romanToNumber(values[0].match(/i{1,3}v{0,1}/)[0]);
+        let b = this.romanToNumber(values[1].match(/i{1,3}v{0,1}/)[0]);
+        if (b < a) {
+          const c = a;
+          a = b;
+          b = c;
+        }
+        value = '';
+        for (let i = a; i <= b; i++) {
+          value = value + `phase ${i}, `;
+        }
+        return value.slice(0, -2);
+      } else if (value == 'not selected' || value == 'not specified') {
+        return undefined;
+      } else {
+        return value;
+      }
+    }
+    return undefined;
+  }
+
+  romanToNumber(value: string): number {
+    switch (value) {
+      case 'i':
+        return 1;
+      case 'ii':
+        return 2;
+      case 'iii':
+        return 3;
+      case 'iv':
+        return 4;
+      default:
+        0;
+    }
+  }
+
+  getStudyType(value: string): string {
     value = value.replace('study', '');
     value = value.replace('Study', '');
     return this.getProcessedString(value);
   }
 
-  private getTargetSize(value: string): {
+  getTargetSize(value: string): {
     group?: string;
     count?: number;
   }[] {
@@ -86,6 +278,7 @@ export class CsvService {
 
     value = this.getProcessedStringNull(value);
     if (value) {
+      value = value.toLowerCase();
       if (/^[0-9]*$/.test(value)) {
         targetSize.push({ count: +value });
       } else {
@@ -115,7 +308,7 @@ export class CsvService {
     return targetSize;
   }
 
-  private getCharFromGenderNull(
+  getCharFromGenderNull(
     value: string,
   ): 'Male' | 'Female' | 'Both' | undefined {
     if (value) {
@@ -161,25 +354,25 @@ export class CsvService {
     return undefined;
   }
 
-  private getBoolFromYesNanNull(value: string): boolean | undefined {
+  getBoolFromYesNanNull(value: string): boolean | undefined {
     if (value)
       if (value.toLowerCase().search('yes') != -1) return true;
       else if (value.toLowerCase().search('no') != -1) return false;
     return undefined;
   }
 
-  private getBoolFromParent(value: string): boolean {
+  getBoolFromParent(value: string): boolean {
     if (value) if (value.toLowerCase().search('parent') != -1) return true;
     return false;
   }
 
-  private getBoolFromFalseTrue(value: string): boolean {
+  getBoolFromFalseTrue(value: string): boolean {
     if (value.search('false') != -1 || value.search('False') != -1)
       return false;
     return true;
   }
 
-  private getBoolFromYesNo(value: string): boolean {
+  getBoolFromYesNo(value: string): boolean {
     if (value)
       if (
         value.toLowerCase().search('yes') != -1 ||
@@ -190,7 +383,7 @@ export class CsvService {
     return false;
   }
 
-  private getDateFromSlashDateNull(value: string): Date | undefined {
+  getDateFromSlashDateNull(value: string): Date | undefined {
     if (/\d{1,2}\/\d{1,2}\/\d{4}/.test(value)) {
       const d = value.split('/');
       return new Date(parseInt(d[2]), parseInt(d[1]) - 1, parseInt(d[0]));
@@ -198,18 +391,20 @@ export class CsvService {
     return undefined;
   }
 
-  private getProcessedStringNull(value: string): string | undefined {
-    if (value == '') return undefined;
-    else return this.getProcessedString(value);
+  getProcessedStringNull(value: string): string | undefined {
+    if (value != '' && value) return this.getProcessedString(value);
+    return undefined;
   }
 
-  private getProcessedString(value: string): string {
+  getProcessedString(value: string): string {
+    value = value.replace(/\n/g, ' ');
     while (value.search('  ') != -1) value = value.replace('  ', ' ');
     while (value[value.length - 1] == ' ') value = value.slice(0, -1);
+    while (value[0] == ' ') value = value.substring(1);
     return value;
   }
 
-  private getDateFromWordDate(value: string): Date {
+  getDateFromWordDate(value: string): Date {
     const wMonth: string = value.match(/\w{3,9}/)[0].toLowerCase();
     let month = 0;
     switch (wMonth) {
@@ -268,7 +463,7 @@ export class CsvService {
       })
         .on('error', reject)
         .on('data', (row) => {
-          if (count < 100) {
+          if (count < 17000) {
             const obj = this.rowProcessor(row);
             if (obj) data.push(obj);
             count++;

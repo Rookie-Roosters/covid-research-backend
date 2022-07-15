@@ -8,8 +8,10 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Max,
   MaxLength,
   Min,
+  Validate,
   ValidateNested,
 } from 'class-validator';
 
@@ -66,9 +68,63 @@ export class CreateResearchDto {
   @IsBoolean()
   otherRecords: boolean;
 
-  // inclusionAgeMin?: string;
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(120)
+  inclusionAgeMin?: number; //Is missing check if the other are not null
 
-  // inclusionAgeMax?: string;
+  @IsOptional()
+  @IsString()
+  @MaxLength(32)
+  @IsIn([
+    'years',
+    'months',
+    'weeks',
+    'weeks of pregnacy',
+    'days',
+    'hours',
+    'minutes',
+    'no limit',
+  ])
+  inclusionAgeMinType?:
+    | 'years'
+    | 'months'
+    | 'weeks'
+    | 'weeks of pregnacy'
+    | 'days'
+    | 'hours'
+    | 'minutes'
+    | 'no limit'; //Is missing check if the other are not null
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(120)
+  inclusionAgeMax?: number; //Is missing check if the other are not null
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(32)
+  @IsIn([
+    'years',
+    'months',
+    'weeks',
+    'weeks of pregnacy',
+    'days',
+    'hours',
+    'minutes',
+    'no limit',
+  ])
+  inclusionAgeMaxType?:
+    | 'years'
+    | 'months'
+    | 'weeks'
+    | 'weeks of pregnacy'
+    | 'days'
+    | 'hours'
+    | 'minutes'
+    | 'no limit'; //Is missing check if the other are not null
 
   @IsOptional()
   @IsString()
@@ -94,7 +150,10 @@ export class CreateResearchDto {
   @MaxLength(1024)
   studyDesign?: string;
 
-  // phase?: string;
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  phase?: string;
 
   // countries?: string;
 
@@ -192,10 +251,10 @@ class TargetSizeValidator {
   @IsOptional()
   @IsString()
   @MaxLength(64)
-  group: string;
+  group?: string;
 
   @IsOptional()
   @IsNumber()
   @Min(0)
-  count: number;
+  count?: number;
 }

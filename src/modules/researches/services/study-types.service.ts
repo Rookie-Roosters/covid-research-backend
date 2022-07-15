@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateStudyTypeDto } from './dto/create-study-type.dto';
-import { UpdateStudyTypeDto } from './dto/update-study-type.dto';
-import { StudyType } from './entities/study-type.entity';
+import { CreateStudyTypeDto } from '../dto/create-study-type.dto';
+import { StudyType } from '../entities/study-type.entity';
 
 @Injectable()
 export class StudyTypesService {
@@ -12,8 +11,13 @@ export class StudyTypesService {
     private studyTypeRepository: Repository<StudyType>,
   ) {}
 
-  async create(CreateStudyTypeDto: CreateStudyTypeDto): Promise<StudyType> {
-    return await this.studyTypeRepository.save(CreateStudyTypeDto);
+  async create(createStudyTypeDto: CreateStudyTypeDto) : Promise<StudyType> {
+    let studyType: StudyType = await this.findByValue(createStudyTypeDto.value);
+    if(!studyType) {
+      createStudyTypeDto.value = createStudyTypeDto.value.toLowerCase();
+      studyType = await this.studyTypeRepository.save(createStudyTypeDto);
+    }
+    return studyType;
   }
 
   async findAll(): Promise<StudyType[]> {
@@ -29,13 +33,5 @@ export class StudyTypesService {
       .createQueryBuilder()
       .where('LOWER(value) = LOWER(:value)', { value })
       .getOne();
-  }
-
-  async update(id: number, updateStudyTypeDto: UpdateStudyTypeDto) {
-    return await this.studyTypeRepository.update({ id }, updateStudyTypeDto);
-  }
-
-  async remove(id: number) {
-    return await this.studyTypeRepository.delete({ id });
   }
 }

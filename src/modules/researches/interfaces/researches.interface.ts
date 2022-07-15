@@ -10,8 +10,10 @@ export interface ResearchInterface {
   webAddress: string;
   recruitmentStatus?: string;
   otherRecords: boolean;
-  inclusionAgeMin?: string;
-  inclusionAgeMax?: string;
+  inclusionAgeMin?: number;
+  inclusionAgeMinType?: 'years' | 'months' | 'weeks' | 'weeks of pregnacy' | 'days' | 'hours' | 'minutes' | 'no limit';
+  inclusionAgeMax?: number;
+  inclusionAgeMaxType?: 'years' | 'months' | 'weeks' | 'weeks of pregnacy' | 'days' | 'hours' | 'minutes' | 'no limit';
   inclusionGender?: 'Both' | 'Male' | 'Female';
   dateEnrollement?: Date;
   targetSize: { group?: string; count?: number }[];

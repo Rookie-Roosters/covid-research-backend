@@ -1,7 +1,9 @@
-import { RecruitmentStatus } from 'src/modules/recruitment-statuses/entities/recruitment-status.entity';
-import { SourceRegister } from 'src/modules/source-registers/entities/source-register.entity';
-import { StudyType } from 'src/modules/study-types/entities/study-type.entity';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import { Phase } from "./phase.entity";
+import { RecruitmentStatus } from "./recruitment-status.entity";
+import { SourceRegister } from "./source-register.entity";
+import { StudyType } from "./study-type.entity";
+
 
 @Entity()
 export class Research {
@@ -46,9 +48,33 @@ export class Research {
   @Column({ type: Boolean })
   otherRecords: boolean;
 
-  // inclusionAgeMin?: string
+  @Column({ type: Number, nullable: true })
+  inclusionAgeMin?: number;
 
-  // inclusionAgeMax?: string
+  @Column({ type: String, length: 32, nullable: true })
+  inclusionAgeMinType:
+    | 'years'
+    | 'months'
+    | 'weeks'
+    | 'weeks of pregnacy'
+    | 'days'
+    | 'hours'
+    | 'minutes'
+    | 'no limit';
+
+  @Column({ type: Number, nullable: true })
+  inclusionAgeMax?: number;
+
+  @Column({ type: String, length: 32, nullable: true })
+  inclusionAgeMaxType:
+    | 'years'
+    | 'months'
+    | 'weeks'
+    | 'weeks of pregnacy'
+    | 'days'
+    | 'hours'
+    | 'minutes'
+    | 'no limit';
 
   @Column({ type: String, length: 6, nullable: true })
   inclusionGender?: 'Both' | 'Male' | 'Female';
@@ -64,7 +90,8 @@ export class Research {
   @Column({ type: String, length: 1024, nullable: true })
   studyDesign?: string;
 
-  // phase?: string
+  @ManyToOne(() => Phase, (phase) => phase.id)
+  phase?: number;
 
   // countries?: string
 
