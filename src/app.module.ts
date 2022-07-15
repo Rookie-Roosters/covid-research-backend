@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ResearchesModule } from './modules/researches/researches.module';
+import { CovidInfoModule } from './modules/covid-info/covid-info.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ResearchesModule } from './modules/researches/researches.module';
     }),
     UsersModule,
     ResearchesModule,
+    CovidInfoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
