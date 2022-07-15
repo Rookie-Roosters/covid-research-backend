@@ -1,29 +1,30 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
-
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { BoolBitTransformer } from '@utils/transformers';
+import { BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class User extends BaseEntity {
-  @ApiProperty({ description: 'ola' })
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+    @ApiProperty({ description: "User's primary key" })
+    @PrimaryGeneratedColumn('increment')
+    id: number;
 
-  @ApiProperty()
-  @Column({ type: 'varchar', length: 32 })
-  username: string;
+    @ApiProperty({ description: "User's login email" })
+    @Index({ unique: true })
+    @Column({ length: 64 })
+    email: string;
 
-  @ApiProperty()
-  @Column({ type: 'varchar', length: 64 })
-  email: string;
+    @ApiProperty({ description: "User's first name" })
+    @Column({ length: 32 })
+    firstName: string;
 
-  @ApiProperty()
-  @Column({ type: 'varchar', length: 64 })
-  password: string;
+    @ApiProperty({ description: "User's last name" })
+    @Column({ length: 32 })
+    lastName: string;
 
-  @ApiProperty()
-  @Column({ type: 'varchar', length: 64 })
-  firstName: string;
+    @ApiHideProperty()
+    @Column({ length: 32, select: false })
+    password: string;
 
-  @ApiProperty()
-  @Column({ type: 'varchar', length: 64 })
-  lastName: string;
+    @ApiProperty({ description: 'Whether user has Admin permissions' })
+    @Column({ type: 'bit', transformer: new BoolBitTransformer(), default: false })
+    isAdmin: boolean;
 }
