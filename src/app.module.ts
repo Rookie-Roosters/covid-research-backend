@@ -5,7 +5,6 @@ import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ResearchesModule } from './modules/researches/researches.module';
 import { CovidInfoModule } from './modules/covid-info/covid-info.module';
-import { SourceRegistersModule } from './modules/source-registers/source-registers.module';
 import { CsvModule } from './modules/csv/csv.module';
 
 @Module({
@@ -16,7 +15,7 @@ import { CsvModule } from './modules/csv/csv.module';
       port: 1433,
       username: 'sa',
       password: 'mssql1Ipw',
-      database: 'test3',
+      database: 'test',
       entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
@@ -28,7 +27,6 @@ import { CsvModule } from './modules/csv/csv.module';
     UsersModule,
     ResearchesModule,
     CovidInfoModule,
-    SourceRegistersModule,
     CsvModule,
   ],
   controllers: [AppController],
