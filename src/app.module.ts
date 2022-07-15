@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ResearchesModule } from './modules/researches/researches.module';
+import { CovidInfoModule } from './modules/covid-info/covid-info.module';
 import { SourceRegistersModule } from './modules/source-registers/source-registers.module';
 import { CsvModule } from './modules/csv/csv.module';
 import { RecruitmentStatusesModule } from './modules/recruitment-statuses/recruitment-statuses.module';
@@ -30,6 +31,7 @@ import { StudyTypesModule } from './modules/study-types/study-types.module';
     }),
     UsersModule,
     ResearchesModule,
+    CovidInfoModule,
     SourceRegistersModule,
     CsvModule,
     RecruitmentStatusesModule,
