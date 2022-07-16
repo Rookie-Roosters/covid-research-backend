@@ -134,6 +134,7 @@ export class CreateResearchDto {
   @IsDateString()
   dateEnrollement?: Date;
 
+  @IsDefined()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => TargetSizeValidator)
@@ -154,7 +155,10 @@ export class CreateResearchDto {
   @MaxLength(64)
   phase?: string;
 
-  // countries?: string;
+  @IsDefined()
+  @IsArray()
+  @IsString({each: true})
+  countries: string[];
 
   @IsOptional()
   @IsString()

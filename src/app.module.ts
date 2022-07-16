@@ -10,6 +10,7 @@ import { ResearchesModule } from '@researches/researches.module';
 import { UsersModule } from '@users/users.module';
 import { HttpExceptionFilter } from '@utils/filters';
 import { SharedModule } from './shared/shared.module';
+import { CovidInfoModule } from './modules/covid-info/covid-info.module';
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { SharedModule } from './shared/shared.module';
         BookmarksModule,
         SearchesModule,
         SharedModule,
+        CovidInfoModule
     ],
     providers: [
         {

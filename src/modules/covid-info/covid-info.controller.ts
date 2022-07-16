@@ -21,9 +21,8 @@ export class CovidInfoController {
     return this.covidInfoService.findOne(iso_code);
   }
 
-  @Get()
+  @Get('csv')
   updateAll() {
     return this.covidInfoService.updateAll();
   }
-
 }
