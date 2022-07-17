@@ -1,17 +1,14 @@
+import { CsvService } from '@csv/csv.service';
 import { Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm/repository/Repository';
-import { CsvService } from '../csv/csv.service';
-import { CreateResearchDto } from './dto/create-research.dto';
-import { Research } from './entities/research.entity';
+import { PATHS } from '@utils/constants/paths.constants';
+import { Repository } from 'typeorm';
+import { CreateResearchDto } from './dto';
+import { ResponseResearchDto } from './dto/response-research.dto';
+import { Research } from './entities';
 import { ResearchInterface } from './interfaces/researches.interface';
-import { PhasesService } from './services/phases.service';
-import { RecruitmentStatusesService } from './services/recruitment-statuses.service';
-import { SourceRegistersService } from './services/source-registers.service';
-import { StudyTypesService } from './services/study-types.service';
-import { TargetSizesService } from './services/target-sizes.service';
-import { join } from 'path';
-import { ResearchCountriesService } from './services';
+import { PhasesService, RecruitmentStatusesService, ResearchCountriesService, SourceRegistersService, StudyTypesService, TargetSizesService } from './services';
 
 @Injectable()
 export class ResearchesService {
@@ -27,31 +24,34 @@ export class ResearchesService {
         private researchRespository: Repository<Research>,
     ) {}
 
-    async updateAll() : Promise<ResearchInterface[]> {
-        var results: ResearchInterface[] = await this.csvService.getResearchData(join(__dirname, '..', 'src/modules/csv/assets/IctrpResults.csv'));
+    @Cron(CronExpression.EVERY_HOUR)
+    async updateAll(): Promise<number> {
+        console.log('update research database started');
+        var results: ResearchInterface[] = await this.csvService.getResearchData(PATHS.ASSETS);
         for (var res of results) {
             await this.create(res, false);
         }
-        return results;
+        console.log('update research database finished');
+        return results.length;
     }
 
-    async create(createResearchDto: CreateResearchDto, clean: boolean = true) : Promise<Research> {
+    async create(createResearchDto: CreateResearchDto, clean: boolean = true): Promise<Research> {
         const research = await this.researchRespository.save(
             clean ? await this.getCleanResearch(createResearchDto) : await this.getResearch(createResearchDto),
         );
         for (let target of createResearchDto.targetSize) {
             if (clean && target.group) target.group = this.csvService.getProcessedString(target.group).toLowerCase();
             await this.targetSizesService.create({
-                researchTrialID: research.trialID,
+                researchId: research.id,
                 count: target.count,
                 targetSizeGroup: target.group,
             });
         }
-        for(let country of createResearchDto.countries) {
+        for (let country of createResearchDto.countries) {
             if (clean) country = this.csvService.getProcessedString(country).toLowerCase();
             await this.researchCountriesService.create({
-                researchTrialID: research.trialID,
-                country: country
+                researchId: research.id,
+                country: country,
             });
         }
         return research;
@@ -61,13 +61,33 @@ export class ResearchesService {
         return await this.researchRespository.find();
     }
 
-    async findOne(trialID: string) {
-        return await this.researchRespository.findOneBy({ trialID });
+    async findOne(id: string) : Promise<ResponseResearchDto> | null {
+        const research = await this.researchRespository.findOne({
+            where: {
+                id
+            },
+            relations: {
+                recruitmentStatus: true,
+                phase: true,
+                sourceRegister: true,
+                studyType: true,
+            }
+        });
+        if(research) {
+            let responseResearch: ResponseResearchDto = new ResponseResearchDto();
+            for(let attr in research) {
+                responseResearch[attr] = research[attr];
+            }
+            let targetSizes = this.targetSizesService.findByResearch(responseResearch.id);
+            console.log(targetSizes);
+            return responseResearch;
+        }
+        return null;
     }
 
     private async getCleanResearch(createResearchDto: CreateResearchDto): Promise<Research> {
         const research: Research = {
-            trialID: this.csvService.getProcessedString(createResearchDto.trialID),
+            id: this.csvService.getProcessedString(createResearchDto.id),
             lastRefreshedOn: createResearchDto.lastRefreshedOn,
             publicTitle: this.csvService.getProcessedString(createResearchDto.publicTitle),
             scientificTitle: this.csvService.getProcessedStringNull(createResearchDto.scientificTitle),

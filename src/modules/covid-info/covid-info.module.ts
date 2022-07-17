@@ -8,6 +8,7 @@ import { CsvModule } from '../csv/csv.module';
 @Module({
   imports: [TypeOrmModule.forFeature([CovidInfo]), CsvModule],
   controllers: [CovidInfoController],
-  providers: [CovidInfoService]
+  providers: [CovidInfoService],
+  exports: [CovidInfoService]
 })
 export class CovidInfoModule {}

@@ -4,7 +4,9 @@ import { parseFile } from 'fast-csv';
 import * as fs from 'fs';
 import * as https from 'https';
 import * as csv from 'csv-parser';
+import * as puppeteer from 'puppeteer';
 import { CovidInfoInterface } from '../covid-info/interfaces/covid-info.interface';
+import { join } from 'path';
 
 @Injectable()
 export class CsvService {
@@ -14,7 +16,7 @@ export class CsvService {
             const ageMax = this.getAgeNull(row['Inclusion agemax']);
 
             const a: ResearchInterface = {
-                trialID: this.getProcessedString(row['TrialID']),
+                id: this.getProcessedString(row['TrialID']),
                 lastRefreshedOn: this.getDateFromWordDate(row['Last Refreshed on']),
                 publicTitle: this.getProcessedString(row['Public title']),
                 scientificTitle: this.getProcessedStringNull(row['Scientific title']),
@@ -61,19 +63,17 @@ export class CsvService {
         return undefined;
     }
 
-    getCountries(value: string) : string[] {
+    getCountries(value: string): string[] {
         let countries: string[] = [];
         if (value) {
             let values = value.split(';');
-            if(values[values.length - 1] == '') values.pop();
+            if (values[values.length - 1] == '') values.pop();
             value = '';
-            for(let val of values) 
-                value = value + val + ',';
+            for (let val of values) value = value + val + ',';
             values = value.split(',');
-            if(values[values.length - 1] == '') values.pop();
-            for(let val of values) {
-                if(/\(/.test(val))
-                    val = val.substring(0, val.match(/\(/).index);
+            if (values[values.length - 1] == '') values.pop();
+            for (let val of values) {
+                if (/\(/.test(val)) val = val.substring(0, val.match(/\(/).index);
                 countries.push(this.getProcessedString(val.toLowerCase()));
             }
         }
@@ -260,14 +260,14 @@ export class CsvService {
                     let res = v.match(/:\ {0,1}\d+/);
                     if (res) {
                         targetSize.push({
-                            group: v.substring(0, res.index),
+                            group: this.getProcessedString(v.substring(0, res.index)),
                             count: +res[0].match(/\d+/)[0],
                         });
                     } else {
                         res = v.match(/^\d+\ /);
                         if (res) {
                             targetSize.push({
-                                group: v.substring(res[0].length, v.length),
+                                group: this.getProcessedString(v.substring(res[0].length, v.length)),
                                 count: +res[0].match(/\d+/)[0],
                             });
                         } else {
@@ -343,6 +343,7 @@ export class CsvService {
     }
 
     getProcessedString(value: string): string {
+        value = value.replace(/\t/g, ' ');
         value = value.replace(/\n/g, ' ');
         while (value.search('  ') != -1) value = value.replace('  ', ' ');
         while (value[value.length - 1] == ' ') value = value.slice(0, -1);
@@ -396,39 +397,72 @@ export class CsvService {
         return new Date(year, month - 1, day);
     }
 
-    count: number = 0;
+    private delay(time: number) {
+        return new Promise(function (resolve) {
+            setTimeout(resolve, time);
+        });
+    }
 
-    getResearchData(path: string): Promise<ResearchInterface[]> {
-        return new Promise((resolve, reject) => {
+    private async whoWebScraping(path: string) {
+        await puppeteer
+            .launch({
+                headless: true,
+                args: ['--fast-start', '--disable-extensions', '--no-sandbox'],
+                ignoreHTTPSErrors: true,
+            })
+            .then(async (browser) => {
+                const page = await browser.newPage();
+                await page.goto('https://trialsearch.who.int/');
+                await page.click('input[id=chkCOVIDRestriction]');
+                await page.click('input[id=Button1]');
+                await page.waitForTimeout(5000);
+                const client = await page.target().createCDPSession();
+                await client.send('Browser.setDownloadBehavior', {
+                    behavior: 'allow',
+                    downloadPath: path,
+                });
+                await page.click('input[id=Button7]');
+                await page.waitForTimeout(60 * 1000 * 10);
+            });
+    }
+
+    async getResearchData(path: string): Promise<ResearchInterface[]> {
+        console.log('https://trialsearch.who.int/ web scraping started');
+        await this.whoWebScraping(path);
+        console.log('web scraping finished');
+        console.log('research csv read satarted');
+        const researchInterfaces: ResearchInterface[] = await new Promise((resolve, reject) => {
             const data: ResearchInterface[] = [];
-            parseFile(path, {
+            parseFile(join(path, 'IctrpResults.csv'), {
                 delimiter: ',',
                 headers: true,
                 discardUnmappedColumns: true,
             })
                 .on('error', reject)
                 .on('data', (row) => {
-                    if(this.count < 10) {
-                        const obj = this.rowProcessor(row);
-                        if (obj) data.push(obj);
-                        this.count++;
-                    }
+                    const obj = this.rowProcessor(row);
+                    if (obj) data.push(obj);
                 })
                 .on('end', () => {
                     resolve(data);
                 });
         });
+        await fs.unlinkSync(join(path, 'IctrpResults.csv'));
+        console.log('research csv read finished');
+        return researchInterfaces;
     }
 
     getCovidInfoData(path: string): Promise<CovidInfoInterface[]> {
         return new Promise((resolve, reject) => {
             const results: CovidInfoInterface[] = [];
-            const file = fs.createWriteStream(path);
+            const file = fs.createWriteStream(join(path, 'covid-data.txt'));
             //get the latest csv file
             https.get('https://covid.ourworldindata.org/data/latest/owid-covid-latest.csv', (response) => {
                 var stream = response.pipe(file);
                 stream.on('finish', async () => {
-                    fs.createReadStream(path)
+                    console.log('covid data csv read satarted');
+                    await fs
+                        .createReadStream(join(path, 'covid-data.txt'))
                         .pipe(csv())
                         .on('data', (data) => {
                             //mssql doesn't automatically convert empty strings to NULL values (and thus, are not accepted in the int and float fields of the database).
@@ -440,6 +474,8 @@ export class CsvService {
                             resolve(results);
                         })
                         .on('error', reject);
+                    await fs.unlinkSync(join(path, 'covid-data.txt'));
+                    console.log('covid data csv read finished');
                 });
             });
         });

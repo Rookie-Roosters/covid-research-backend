@@ -4,7 +4,7 @@ export class CreateResearchCountryDto {
     @IsDefined()
     @IsString()
     @MaxLength(64)
-    researchTrialID: string;
+    researchId: string;
 
     @IsDefined()
     @IsString()

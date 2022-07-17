@@ -10,7 +10,7 @@ export class TargetSize {
   @Column({ type: Number, nullable: true })
   count?: number;
 
-  @ManyToOne(() => Research, (research) => research.trialID)
+  @ManyToOne(() => Research, (research) => research.id)
   research: string;
 
   @ManyToOne(() => TargetSizeGroup, (targetSizeGroup) => targetSizeGroup.id)

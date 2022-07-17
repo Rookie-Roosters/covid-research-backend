@@ -6,31 +6,32 @@ import { SourceRegister } from '../entities/source-register.entity';
 
 @Injectable()
 export class SourceRegistersService {
-  constructor(
-    @InjectRepository(SourceRegister)
-    private sourceRegisterRepository: Repository<SourceRegister>,
-  ) {}
+    constructor(
+        @InjectRepository(SourceRegister)
+        private sourceRegisterRepository: Repository<SourceRegister>,
+    ) {}
 
-  async create(createSourceRegisterDto: CreateSourceRegisterDto) : Promise<SourceRegister> {
-    let sourceRegister: SourceRegister = await this.findByValue(createSourceRegisterDto.value);
-    if(!sourceRegister) {
-      sourceRegister = await this.sourceRegisterRepository.save(createSourceRegisterDto);
+    async create(createSourceRegisterDto: CreateSourceRegisterDto): Promise<SourceRegister> {
+        let sourceRegister: SourceRegister = await this.findByValue(createSourceRegisterDto.value);
+        if (!sourceRegister) {
+            sourceRegister = await this.sourceRegisterRepository.save(createSourceRegisterDto);
+        }
+        return sourceRegister;
     }
-    return sourceRegister;
-  }
 
-  async findAll(): Promise<SourceRegister[]> {
-    return await this.sourceRegisterRepository.find();
-  }
+    async findAll(): Promise<SourceRegister[]> {
+        return await this.sourceRegisterRepository.find({
+            order: {
+                value: 'ASC',
+            },
+        });
+    }
 
-  async findOne(id: number): Promise<SourceRegister> {
-    return await this.sourceRegisterRepository.findOneBy({ id });
-  }
+    async findOne(id: number): Promise<SourceRegister> {
+        return await this.sourceRegisterRepository.findOneBy({ id });
+    }
 
-  async findByValue(value: string): Promise<SourceRegister> {
-    return await this.sourceRegisterRepository
-      .createQueryBuilder()
-      .where('LOWER(value) = LOWER(:value)', { value })
-      .getOne();
-  }
+    async findByValue(value: string): Promise<SourceRegister> {
+        return await this.sourceRegisterRepository.createQueryBuilder().where('LOWER(value) = LOWER(:value)', { value }).getOne();
+    }
 }

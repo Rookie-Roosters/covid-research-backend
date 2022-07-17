@@ -7,7 +7,7 @@ export class ResearchCountry {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Research, (research) => research.trialID)
+    @ManyToOne(() => Research, (research) => research.id)
     research: string;
 
     @ManyToOne(() => Country, (country) => country.id)

@@ -21,7 +21,11 @@ export class PhasesService {
   }
 
   async findAll(): Promise<Phase[]> {
-    return await this.phaseRepository.find();
+    return await this.phaseRepository.find({
+      order: {
+        value: 'ASC',
+      }
+    });
   }
 
   async findOne(id: number) {

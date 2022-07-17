@@ -1,5 +1,5 @@
 export interface ResearchInterface {
-  trialID: string;
+  id: string;
   lastRefreshedOn: Date;
   publicTitle: string;
   scientificTitle?: string;

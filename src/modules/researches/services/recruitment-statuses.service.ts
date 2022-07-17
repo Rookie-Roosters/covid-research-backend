@@ -21,7 +21,11 @@ export class RecruitmentStatusesService {
   }
 
   async findAll(): Promise<RecruitmentStatus[]> {
-    return await this.recruitmentStatusRepository.find();
+    return await this.recruitmentStatusRepository.find({
+      order: {
+        value: 'ASC'
+      }
+    });
   }
 
   async findOne(id: number) {

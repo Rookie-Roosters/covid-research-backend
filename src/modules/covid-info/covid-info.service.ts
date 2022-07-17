@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import * as csv from 'csv-parser';
-import * as fs from 'fs';
-import * as https from 'https';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CovidInfo } from './entities/covid-info.entity';
 import { CsvService } from '../csv/csv.service';
 import { join } from 'path';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { PATHS } from '@utils/constants/paths.constants';
 
 @Injectable()
 export class CovidInfoService {
@@ -25,10 +24,19 @@ export class CovidInfoService {
         } catch (err) {}
     }
 
+    @Cron(CronExpression.EVERY_HOUR)
     async updateAll() {
-        const results = await this.csvService.getCovidInfoData(join(__dirname, '..', 'src/modules/csv/assets/covid-data.txt'));
+        console.log('update covid info started');
+        const results = await this.csvService.getCovidInfoData(PATHS.ASSETS);
         for (let res of results) {
             await this.covidInfoRepository.save(res);
         }
+        console.log('update covid info finished');
+    }
+
+    async findOneByValue(value: string): Promise<CovidInfo> {
+        return await this.covidInfoRepository.findOneBy({
+            location: value,
+        });
     }
 }

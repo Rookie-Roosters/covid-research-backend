@@ -14,12 +14,12 @@ export class CovidInfoController {
     return this.covidInfoService.findAll();
   }
 
-  @Get(':iso_code')
-  @ApiBody({ type: String })
-  @ApiResponse({ type: CovidInfo })
-  findOne(@Param('iso_code') iso_code: string): Promise<CovidInfo> {
-    return this.covidInfoService.findOne(iso_code);
-  }
+  // @Get(':iso_code')
+  // @ApiBody({ type: String })
+  // @ApiResponse({ type: CovidInfo })
+  // findOne(@Param('iso_code') iso_code: string): Promise<CovidInfo> {
+  //   return this.covidInfoService.findOne(iso_code);
+  // }
 
   @Get('csv')
   updateAll() {

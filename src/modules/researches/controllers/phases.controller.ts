@@ -1,24 +1,22 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Put,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Phase } from '@researches/entities';
+import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
+import { ICommonHttpResponse } from '@utils/interfaces';
 import { PhasesService } from '../services/phases.service';
 
-@Controller('phases')
+@ApiTags('Phases')
+@Controller(API_ENDPOINTS.RESEARCHES.PHASES.BASE_PATH)
 export class PhasesController {
-  constructor(private readonly phasesService: PhasesService) {}
-  @Get()
-  findAll() {
-    return this.phasesService.findAll();
-  }
+    constructor(private readonly phasesService: PhasesService) {}
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.phasesService.findOne(+id);
-  }
+    @Get()
+    @ApiOperation({ summary: '[All] Find `Phases`', description: 'Find all the `Phases` in the database' })
+    @ApiOkResponse({ type: [Phase], description: 'A collection of every registered `Phase` sorted by value' })
+    async findAll(): Promise<ICommonHttpResponse<Phase[]>> {
+        const result = await this.phasesService.findAll();
+        return {
+            data: result,
+        };
+    }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateTargetSizeDto } from '@researches/dto';
-import { TargetSize, TargetSizeGroup } from '@researches/entities';
+import { Research, TargetSize, TargetSizeGroup } from '@researches/entities';
 import { Repository } from 'typeorm';
 import { TargetSizeGroupsService } from './target-size-groups.service';
 
@@ -20,7 +20,7 @@ export class TargetSizesService {
                 value: createTargetSizeDto.targetSizeGroup,
             });
         }
-        let targetSize = await this.findByValues(createTargetSizeDto.researchTrialID, targetSizeGroup ? targetSizeGroup.id : undefined);
+        let targetSize = await this.findByValues(createTargetSizeDto.researchId, targetSizeGroup ? targetSizeGroup.id : undefined);
         if (targetSize) {
             targetSize = await this.targetSizeRepository.save({
                 id: targetSize.id,
@@ -29,7 +29,7 @@ export class TargetSizesService {
         } else {
             targetSize = await this.targetSizeRepository.save({
                 count: createTargetSizeDto.count,
-                research: createTargetSizeDto.researchTrialID,
+                research: createTargetSizeDto.researchId,
                 targetSizeGroup: targetSizeGroup ? targetSizeGroup.id : undefined,
             });
         }
@@ -44,11 +44,19 @@ export class TargetSizesService {
         return await this.targetSizeRepository.findOneBy({ id });
     }
 
-    private async findByValues(researchTrialID: string, targetSizeGroup?: number): Promise<TargetSize> {
+    async findByResearch(researchId: string): Promise<TargetSize[]> {
+        return await this.targetSizeRepository.find({
+            where: {
+                research: researchId,
+            }
+        });
+    }
+
+    private async findByValues(researchId: string, targetSizeGroup?: number): Promise<TargetSize> {
         return await this.targetSizeRepository
             .createQueryBuilder()
-            .where('researchTrialID = :reseach and targetSizeGroupId = :group', {
-                reseach: researchTrialID,
+            .where('researchId = :reseach and targetSizeGroupId = :group', {
+                reseach: researchId,
                 group: targetSizeGroup,
             })
             .getOne();

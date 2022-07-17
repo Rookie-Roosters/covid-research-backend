@@ -1,13 +1,28 @@
 {
-  "files.exclude": {
-    ".vscode": true,
-    "node_modules": true,
-    "package-lock.json": true,
-    "tsconfig.build.json": true,
-    "dist": true,
-    ".eslintrc.js": true,
-    ".prettierrc": true,
-    "nest-cli.json": true,
-    "webpack-hmr.config.js": true
-  }
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/node_modules": true,
+        "**/.vscode": true,
+        ".eslintrc.js": true,
+        ".prettierrc": true,
+        "package-lock.json": true,
+        "nest-cli.json": true,
+        "tsconfig.build.json": true,
+        "webpack-hmr.config.js": true,
+        "node_modules": true
+    },
+    "hide-files.files": [
+        ".eslintrc.js",
+        ".prettierrc",
+        "package-lock.json",
+        "nest-cli.json",
+        "tsconfig.build.json",
+        "webpack-hmr.config.js",
+        "node_modules"
+    ]
 }

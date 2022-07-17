@@ -6,32 +6,33 @@ import { StudyType } from '../entities/study-type.entity';
 
 @Injectable()
 export class StudyTypesService {
-  constructor(
-    @InjectRepository(StudyType)
-    private studyTypeRepository: Repository<StudyType>,
-  ) {}
+    constructor(
+        @InjectRepository(StudyType)
+        private studyTypeRepository: Repository<StudyType>,
+    ) {}
 
-  async create(createStudyTypeDto: CreateStudyTypeDto) : Promise<StudyType> {
-    let studyType: StudyType = await this.findByValue(createStudyTypeDto.value);
-    if(!studyType) {
-      createStudyTypeDto.value = createStudyTypeDto.value.toLowerCase();
-      studyType = await this.studyTypeRepository.save(createStudyTypeDto);
+    async create(createStudyTypeDto: CreateStudyTypeDto): Promise<StudyType> {
+        let studyType: StudyType = await this.findByValue(createStudyTypeDto.value);
+        if (!studyType) {
+            createStudyTypeDto.value = createStudyTypeDto.value.toLowerCase();
+            studyType = await this.studyTypeRepository.save(createStudyTypeDto);
+        }
+        return studyType;
     }
-    return studyType;
-  }
 
-  async findAll(): Promise<StudyType[]> {
-    return await this.studyTypeRepository.find();
-  }
+    async findAll(): Promise<StudyType[]> {
+        return await this.studyTypeRepository.find({
+          order: {
+            value: 'ASC',
+          }
+        });
+    }
 
-  async findOne(id: number): Promise<StudyType> {
-    return await this.studyTypeRepository.findOneBy({ id });
-  }
+    async findOne(id: number): Promise<StudyType> {
+        return await this.studyTypeRepository.findOneBy({ id });
+    }
 
-  async findByValue(value: string): Promise<StudyType> {
-    return await this.studyTypeRepository
-      .createQueryBuilder()
-      .where('LOWER(value) = LOWER(:value)', { value })
-      .getOne();
-  }
+    async findByValue(value: string): Promise<StudyType> {
+        return await this.studyTypeRepository.createQueryBuilder().where('LOWER(value) = LOWER(:value)', { value }).getOne();
+    }
 }

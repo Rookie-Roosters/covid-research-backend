@@ -1,15 +1,14 @@
 import { CsvModule } from '@csv/csv.module';
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CovidInfoModule } from '../covid-info/covid-info.module';
 import {
-    CountriesController,
     PhasesController,
     RecruitmentStatusesController,
-    ResearchCountriesController,
     SourceRegistersController,
     StudyTypesController,
     TargetSizeGroupsController,
-    TargetSizesController,
 } from './controllers';
 import { Country, Phase, RecruitmentStatus, Research, ResearchCountry, SourceRegister, StudyType, TargetSize, TargetSizeGroup } from './entities';
 import { ResearchesController } from './researches.controller';
@@ -29,6 +28,7 @@ import {
     imports: [
         TypeOrmModule.forFeature([Research, SourceRegister, RecruitmentStatus, TargetSize, TargetSizeGroup, StudyType, Phase, Country, ResearchCountry]),
         CsvModule,
+        CovidInfoModule,
     ],
     controllers: [
         ResearchesController,
@@ -36,10 +36,7 @@ import {
         RecruitmentStatusesController,
         SourceRegistersController,
         StudyTypesController,
-        TargetSizesController,
         TargetSizeGroupsController,
-        CountriesController,
-        ResearchCountriesController,
     ],
     providers: [
         ResearchesService,

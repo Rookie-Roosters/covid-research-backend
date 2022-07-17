@@ -11,7 +11,7 @@ export class CreateTargetSizeDto {
   @IsDefined()
   @IsString()
   @MaxLength(64)
-  researchTrialID: string;
+  researchId: string;
 
   @IsOptional()
   @IsString()
