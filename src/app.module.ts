@@ -9,7 +9,8 @@ import { SearchesModule } from '@searches/searches.module';
 import { ResearchesModule } from '@researches/researches.module';
 import { UsersModule } from '@users/users.module';
 import { HttpExceptionFilter } from '@utils/filters';
-import { SharedModule } from './shared/shared.module';
+import { GlobalModule } from '@shared/global/global.module';
+import { AuthenticationModule } from '@authentication/authentication.module';
 
 @Module({
     imports: [
@@ -23,7 +24,8 @@ import { SharedModule } from './shared/shared.module';
         UsersModule,
         BookmarksModule,
         SearchesModule,
-        SharedModule,
+        GlobalModule,
+        AuthenticationModule,
     ],
     providers: [
         {

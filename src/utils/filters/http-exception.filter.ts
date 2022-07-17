@@ -1,10 +1,10 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Inject } from '@nestjs/common';
-import { SHARED_PROVIDERS } from '@shared/constants';
+import { GLOBAL_PROVIDERS } from '@shared/global/constants';
 import { Request, Response } from 'express';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-    constructor(@Inject(SHARED_PROVIDERS.IS_PRODUCTION) private readonly isProduction: boolean) {}
+    constructor(@Inject(GLOBAL_PROVIDERS.IS_PRODUCTION_ENV) private readonly isProductionEnv: boolean) {}
 
     catch(exception: HttpException, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
@@ -23,7 +23,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
             messages: messages,
             timestamp: new Date().toISOString(),
             path: request.url,
-            ...(!this.isProduction && { stack: exception.stack }),
+            ...(!this.isProductionEnv && { stack: exception.stack }),
         });
     }
 }

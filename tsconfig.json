@@ -20,8 +20,10 @@
         "paths": {
             "@config/*": ["src/config/*"],
             "@shared/*": ["src/shared/*"],
+            "@global/*": ["src/shared/global/*"],
             "@utils/*": ["src/utils/*"],
             // Modules
+            "@authentication/*": ["src/modules/authentication/*"],
             "@bookmarks/*": ["src/modules/bookmarks/*"],
             "@researches/*": ["src/modules/researches/*"],
             "@searches/*": ["src/modules/searches/*"],
