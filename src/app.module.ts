@@ -8,6 +8,10 @@ import { UsersModule } from '@users/users.module';
 import { HttpExceptionFilter } from '@utils/filters';
 import { GlobalModule } from '@shared/global/global.module';
 import { AuthenticationModule } from '@authentication/authentication.module';
+import { ResearchesModule } from '@researches/researches.module';
+import { BookmarksModule } from '@bookmarks/bookmarks.module';
+import { CovidInfoModule } from './modules/covid-info/covid-info.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
@@ -17,7 +21,11 @@ import { AuthenticationModule } from '@authentication/authentication.module';
         TypeOrmModule.forRootAsync({
             useClass: DatabaseService,
         }),
+        ScheduleModule.forRoot(),
+        ResearchesModule,
         UsersModule,
+        BookmarksModule,
+        CovidInfoModule,
         GlobalModule,
         AuthenticationModule,
     ],
