@@ -2,6 +2,7 @@ import { USER_ROLES } from '@authentication/constants';
 import { Authenticated, CurrentUser } from '@authentication/decorators';
 import { LogInUserDto } from '@authentication/dto/user-login.dto';
 import { LocalAuthGuard } from '@authentication/guards';
+import { IAuthTokenResponse } from '@authentication/interfaces';
 import { AuthenticationService } from '@authentication/services';
 import { Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
@@ -18,7 +19,7 @@ export class AuthenticationController {
     @UseGuards(LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
     @ApiBody({ type: LogInUserDto })
-    async logIn(@CurrentUser() currentUser: User): Promise<ICommonHttpResponse> {
+    async logIn(@CurrentUser() currentUser: User): Promise<ICommonHttpResponse<IAuthTokenResponse>> {
         const res = await this.authenticationService.logIn(currentUser);
         return { data: res };
     }

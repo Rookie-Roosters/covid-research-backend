@@ -4,9 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseService } from '@config/database';
-import { BookmarksModule } from '@bookmarks/bookmarks.module';
-import { SearchesModule } from '@searches/searches.module';
-import { ResearchesModule } from '@researches/researches.module';
 import { UsersModule } from '@users/users.module';
 import { HttpExceptionFilter } from '@utils/filters';
 import { GlobalModule } from '@shared/global/global.module';
@@ -20,10 +17,7 @@ import { AuthenticationModule } from '@authentication/authentication.module';
         TypeOrmModule.forRootAsync({
             useClass: DatabaseService,
         }),
-        ResearchesModule,
         UsersModule,
-        BookmarksModule,
-        SearchesModule,
         GlobalModule,
         AuthenticationModule,
     ],

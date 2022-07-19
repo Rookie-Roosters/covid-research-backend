@@ -31,7 +31,7 @@ export class User {
     lastName: string;
 
     @ApiHideProperty()
-    @Column({ length: 32, select: false })
+    @Column({ length: 32 })
     password: string;
 
     @ApiProperty({ description: "User's roles" })
