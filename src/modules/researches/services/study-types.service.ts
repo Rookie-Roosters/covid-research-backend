@@ -22,9 +22,9 @@ export class StudyTypesService {
 
     async findAll(): Promise<StudyType[]> {
         return await this.studyTypeRepository.find({
-          order: {
-            value: 'ASC',
-          }
+            order: {
+                value: 'ASC',
+            },
         });
     }
 

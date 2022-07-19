@@ -12,8 +12,11 @@ export class ResearchesController {
     constructor(private researchesService: ResearchesService) {}
 
     @Get(API_ENDPOINTS.RESEARCHES.UPDATE_DB)
-    @ApiOperation({summary: '[All] Update `Research` in the database', description: 'Download the data of the page https://trialsearch.who.int/ and update the database with the data\ntakes around 30 minutes'})
-    async updateDB() : Promise<void> {
+    @ApiOperation({
+        summary: '[All] Update `Research` in the database',
+        description: 'Download the data of the page https://trialsearch.who.int/ and update the database with the data\ntakes around 30 minutes',
+    })
+    async updateDB(): Promise<void> {
         await this.researchesService.updateAll();
     }
 

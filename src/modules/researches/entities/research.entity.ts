@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { Phase } from './phase.entity';
 import { RecruitmentStatus } from './recruitment-status.entity';
 import { SourceRegister } from './source-register.entity';
 import { StudyType } from './study-type.entity';
+import { TargetSize } from './target-size.entity';
 
 @Entity()
 export class Research {

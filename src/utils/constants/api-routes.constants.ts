@@ -6,7 +6,8 @@ export const API_RESOURCES = {
         RECRUITMENT_STATUSES: 'recruitment-statuses',
         SOURCE_REGISTERS: 'source-registers',
         STUDY_TYPES: 'study-types',
-        TARGET_SIZE_GROUPS: 'target-size-groups'
+        TARGET_SIZE_GROUPS: 'target-size-groups',
+        TARGET_SIZES: 'target-sizes',
     },
     SEARCHES: 'searches',
     USERS: 'users',
@@ -39,7 +40,10 @@ export const API_ENDPOINTS = {
         },
         TARGET_SIZE_GROUPS: {
             BASE_PATH: `/${API_RESOURCES.RESEARCHES_RESOURCES.TARGET_SIZE_GROUPS}`,
-        }
+        },
+        TARGET_SIZES: {
+            BASE_PATH: `/${API_RESOURCES.RESEARCHES_RESOURCES.TARGET_SIZES}`,
+        },
     },
     SEARCHES: {
         BASE_PATH: `/${API_RESOURCES.SEARCHES}`,

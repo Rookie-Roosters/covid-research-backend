@@ -64,12 +64,12 @@ export class CsvService {
     }
 
     getCountries(value: string): string[] {
-        let countries: string[] = [];
+        const countries: string[] = [];
         if (value) {
             let values = value.split(';');
             if (values[values.length - 1] == '') values.pop();
             value = '';
-            for (let val of values) value = value + val + ',';
+            for (const val of values) value = value + val + ',';
             values = value.split(',');
             if (values[values.length - 1] == '') values.pop();
             for (let val of values) {
@@ -148,8 +148,8 @@ export class CsvService {
                 return 'phase ' + value;
             } else if (/phase\ {0,1}\d\ {0,1}\/\ {0,1}phase\ {0,1}\d\ {0,1}/.test(value)) {
                 const values = value.split('/');
-                let a = +values[0].match(/\d/)[0];
-                let b = +values[1].match(/\d/)[0];
+                const a = +values[0].match(/\d/)[0];
+                const b = +values[1].match(/\d/)[0];
                 if (b == a) return 'phase ' + a;
                 if (b < a) return 'phase ' + b + ', phase ' + a;
                 return 'phase ' + a + ', phase ' + b;
@@ -190,8 +190,8 @@ export class CsvService {
                 return value.slice(0, -2);
             } else if (/i{1,3}v{0,1}(\/|,)i{1,3}v{0,1}/.test(value)) {
                 const values = value.split(/\//.test(value) ? '/' : ',');
-                let a = this.romanToNumber(values[0].match(/i{1,3}v{0,1}/)[0]);
-                let b = this.romanToNumber(values[1].match(/i{1,3}v{0,1}/)[0]);
+                const a = this.romanToNumber(values[0].match(/i{1,3}v{0,1}/)[0]);
+                const b = this.romanToNumber(values[1].match(/i{1,3}v{0,1}/)[0]);
                 if (b == a) return 'phase ' + a;
                 if (b < a) return 'phase ' + b + ', phase ' + a;
                 return 'phase ' + a + ', phase ' + b;
@@ -243,7 +243,7 @@ export class CsvService {
         group?: string;
         count?: number;
     }[] {
-        let targetSize: {
+        const targetSize: {
             group?: string;
             count?: number;
         }[] = [];
@@ -254,9 +254,9 @@ export class CsvService {
             if (/^[0-9]*$/.test(value)) {
                 targetSize.push({ count: +value });
             } else {
-                let values = value.split(';');
+                const values = value.split(';');
                 if (values[values.length - 1] == '') values.pop();
-                for (let v of values) {
+                for (const v of values) {
                     let res = v.match(/:\ {0,1}\d+/);
                     if (res) {
                         targetSize.push({
@@ -458,7 +458,7 @@ export class CsvService {
             const file = fs.createWriteStream(join(path, 'covid-data.txt'));
             //get the latest csv file
             https.get('https://covid.ourworldindata.org/data/latest/owid-covid-latest.csv', (response) => {
-                var stream = response.pipe(file);
+                const stream = response.pipe(file);
                 stream.on('finish', async () => {
                     console.log('covid data csv read satarted');
                     await fs

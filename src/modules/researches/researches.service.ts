@@ -5,10 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PATHS } from '@utils/constants/paths.constants';
 import { Repository } from 'typeorm';
 import { CreateResearchDto } from './dto';
-import { ResponseResearchDto } from './dto/response-research.dto';
+import { ResponseResearchDto, TargetSizeType } from './dto/response-research.dto';
 import { Research } from './entities';
 import { ResearchInterface } from './interfaces/researches.interface';
 import { PhasesService, RecruitmentStatusesService, ResearchCountriesService, SourceRegistersService, StudyTypesService, TargetSizesService } from './services';
+import to from 'await-to-js';
+import { NotFoundException } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
+import { forwardRef } from '@nestjs/common';
 
 @Injectable()
 export class ResearchesService {
@@ -27,19 +31,19 @@ export class ResearchesService {
     @Cron(CronExpression.EVERY_HOUR)
     async updateAll(): Promise<number> {
         console.log('update research database started');
-        var results: ResearchInterface[] = await this.csvService.getResearchData(PATHS.ASSETS);
-        for (var res of results) {
+        const results: ResearchInterface[] = await this.csvService.getResearchData(PATHS.ASSETS);
+        for (const res of results) {
             await this.create(res, false);
         }
         console.log('update research database finished');
         return results.length;
     }
 
-    async create(createResearchDto: CreateResearchDto, clean: boolean = true): Promise<Research> {
+    async create(createResearchDto: CreateResearchDto, clean = true): Promise<Research> {
         const research = await this.researchRespository.save(
             clean ? await this.getCleanResearch(createResearchDto) : await this.getResearch(createResearchDto),
         );
-        for (let target of createResearchDto.targetSize) {
+        for (const target of createResearchDto.targetSize) {
             if (clean && target.group) target.group = this.csvService.getProcessedString(target.group).toLowerCase();
             await this.targetSizesService.create({
                 researchId: research.id,
@@ -61,25 +65,39 @@ export class ResearchesService {
         return await this.researchRespository.find();
     }
 
-    async findOne(id: string) : Promise<ResponseResearchDto> | null {
-        const research = await this.researchRespository.findOne({
-            where: {
-                id
-            },
-            relations: {
-                recruitmentStatus: true,
-                phase: true,
-                sourceRegister: true,
-                studyType: true,
-            }
-        });
-        if(research) {
-            let responseResearch: ResponseResearchDto = new ResponseResearchDto();
-            for(let attr in research) {
+    async findOneById(id: string): Promise<Research> {
+        const research = await this.researchRespository.findOneBy({ id });
+        if (!research) throw new NotFoundException(`Research with id ${id} not found`);
+        return research;
+    }
+
+    async findOne(id: string): Promise<ResponseResearchDto> | null {
+        const [err, research] = await to(
+            this.researchRespository.findOne({
+                where: {
+                    id,
+                },
+                relations: {
+                    recruitmentStatus: true,
+                    phase: true,
+                    sourceRegister: true,
+                    studyType: true,
+                },
+            }),
+        );
+        if (research) {
+            const responseResearch: ResponseResearchDto = new ResponseResearchDto();
+            for (const attr in research) {
                 responseResearch[attr] = research[attr];
             }
-            let targetSizes = this.targetSizesService.findByResearch(responseResearch.id);
-            console.log(targetSizes);
+            const targetSizes = await this.targetSizesService.findByResearch(responseResearch.id);
+            const sizes: TargetSizeType[] = [];
+            for (const targetSize of targetSizes)
+                sizes.push({
+                    count: targetSize.count,
+                    group: targetSize.targetSizeGroup,
+                });
+            responseResearch.targetSizes = sizes;
             return responseResearch;
         }
         return null;
@@ -155,8 +173,8 @@ export class ResearchesService {
     }
 
     private async getResearch(createResearchDto: CreateResearchDto): Promise<Research> {
-        let research = new Research();
-        for (var attr in createResearchDto) {
+        const research = new Research();
+        for (const attr in createResearchDto) {
             if (attr == 'sourceRegister') {
                 if (createResearchDto.sourceRegister) {
                     research.sourceRegister = (

@@ -4,6 +4,10 @@ import { CreateTargetSizeDto } from '@researches/dto';
 import { Research, TargetSize, TargetSizeGroup } from '@researches/entities';
 import { Repository } from 'typeorm';
 import { TargetSizeGroupsService } from './target-size-groups.service';
+import to from 'await-to-js';
+import { ResearchesService } from '@researches/researches.service';
+import { Inject } from '@nestjs/common';
+import { forwardRef } from '@nestjs/common';
 
 @Injectable()
 export class TargetSizesService {
@@ -11,6 +15,8 @@ export class TargetSizesService {
         private targetSizeGroupsService: TargetSizeGroupsService,
         @InjectRepository(TargetSize)
         private targetSizeRepository: Repository<TargetSize>,
+        @InjectRepository(Research)
+        private researchesRepository: Repository<Research>,
     ) {}
 
     async create(createTargetSizeDto: CreateTargetSizeDto): Promise<TargetSize> {
@@ -27,9 +33,10 @@ export class TargetSizesService {
                 count: createTargetSizeDto.count,
             });
         } else {
+            const research = await this.researchesRepository.findOneBy({ id: createTargetSizeDto.researchId });
             targetSize = await this.targetSizeRepository.save({
                 count: createTargetSizeDto.count,
-                research: createTargetSizeDto.researchId,
+                research: research,
                 targetSizeGroup: targetSizeGroup ? targetSizeGroup.id : undefined,
             });
         }
@@ -45,11 +52,19 @@ export class TargetSizesService {
     }
 
     async findByResearch(researchId: string): Promise<TargetSize[]> {
-        return await this.targetSizeRepository.find({
-            where: {
-                research: researchId,
-            }
-        });
+        const [err, res] = await to(
+            this.targetSizeRepository.find({
+                relations: {
+                    research: true,
+                },
+                where: {
+                    research: {
+                        id: researchId,
+                    },
+                },
+            }),
+        );
+        if (res) return res;
     }
 
     private async findByValues(researchId: string, targetSizeGroup?: number): Promise<TargetSize> {
