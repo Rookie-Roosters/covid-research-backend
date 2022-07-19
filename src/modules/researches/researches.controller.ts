@@ -3,10 +3,9 @@ import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import { ResponseResearchDto } from './dto/responses/response-research.dto';
-import { Research } from './entities';
 import { ResearchesService } from './researches.service';
 
-// @ApiTags('Researches')
+@ApiTags('Researches')
 @Controller(API_ENDPOINTS.RESEARCHES.BASE_PATH)
 export class ResearchesController {
     constructor(private researchesService: ResearchesService) {}
