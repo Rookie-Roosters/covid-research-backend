@@ -2,11 +2,11 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
-import { ResponseResearchDto } from './dto/response-research.dto';
+import { ResponseResearchDto } from './dto/responses/response-research.dto';
 import { Research } from './entities';
 import { ResearchesService } from './researches.service';
 
-@ApiTags('Researches')
+// @ApiTags('Researches')
 @Controller(API_ENDPOINTS.RESEARCHES.BASE_PATH)
 export class ResearchesController {
     constructor(private researchesService: ResearchesService) {}
@@ -14,7 +14,7 @@ export class ResearchesController {
     @Get(API_ENDPOINTS.RESEARCHES.UPDATE_DB)
     @ApiOperation({
         summary: '[All] Update `Research` in the database',
-        description: 'Download the data of the page https://trialsearch.who.int/ and update the database with the data\ntakes around 30 minutes',
+        description: 'Download the data of the page https://trialsearch.who.int/ and update the database with the data, takes around 30 minutes',
     })
     async updateDB(): Promise<void> {
         await this.researchesService.updateAll();

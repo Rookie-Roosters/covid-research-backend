@@ -4,15 +4,13 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PATHS } from '@utils/constants/paths.constants';
 import { Repository } from 'typeorm';
-import { CreateResearchDto } from './dto';
-import { ResponseResearchDto, TargetSizeType } from './dto/response-research.dto';
+import { CreateResearchDto } from './dto/creates';
+import { ResponseResearchDto } from './dto/responses/response-research.dto';
 import { Research } from './entities';
 import { ResearchInterface } from './interfaces/researches.interface';
 import { PhasesService, RecruitmentStatusesService, ResearchCountriesService, SourceRegistersService, StudyTypesService, TargetSizesService } from './services';
 import to from 'await-to-js';
 import { NotFoundException } from '@nestjs/common';
-import { Inject } from '@nestjs/common';
-import { forwardRef } from '@nestjs/common';
 
 @Injectable()
 export class ResearchesService {
@@ -90,14 +88,8 @@ export class ResearchesService {
             for (const attr in research) {
                 responseResearch[attr] = research[attr];
             }
-            const targetSizes = await this.targetSizesService.findByResearch(responseResearch.id);
-            const sizes: TargetSizeType[] = [];
-            for (const targetSize of targetSizes)
-                sizes.push({
-                    count: targetSize.count,
-                    group: targetSize.targetSizeGroup,
-                });
-            responseResearch.targetSizes = sizes;
+            responseResearch.targetSizes = await this.targetSizesService.findByResearch(responseResearch.id);
+            responseResearch.countries = await this.researchCountriesService.findByResearch(responseResearch.id);
             return responseResearch;
         }
         return null;

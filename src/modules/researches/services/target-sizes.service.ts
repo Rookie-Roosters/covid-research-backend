@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateTargetSizeDto } from '@researches/dto';
+import { CreateTargetSizeDto } from '@researches/dto/creates';
 import { Research, TargetSize, TargetSizeGroup } from '@researches/entities';
 import { Repository } from 'typeorm';
 import { TargetSizeGroupsService } from './target-size-groups.service';
 import to from 'await-to-js';
-import { ResearchesService } from '@researches/researches.service';
-import { Inject } from '@nestjs/common';
-import { forwardRef } from '@nestjs/common';
+import { ResponseTargetSizeDto } from '@researches/dto/responses';
 
 @Injectable()
 export class TargetSizesService {
@@ -51,11 +49,11 @@ export class TargetSizesService {
         return await this.targetSizeRepository.findOneBy({ id });
     }
 
-    async findByResearch(researchId: string): Promise<TargetSize[]> {
+    async findByResearch(researchId: string): Promise<ResponseTargetSizeDto[]> {
         const [err, res] = await to(
             this.targetSizeRepository.find({
                 relations: {
-                    research: true,
+                    targetSizeGroup: true,
                 },
                 where: {
                     research: {
@@ -64,7 +62,7 @@ export class TargetSizesService {
                 },
             }),
         );
-        if (res) return res;
+        if(res) return res as unknown as ResponseTargetSizeDto[];
     }
 
     private async findByValues(researchId: string, targetSizeGroup?: number): Promise<TargetSize> {

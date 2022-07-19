@@ -6,9 +6,9 @@ export class Country {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => CovidInfo, (covidInfo) => covidInfo.iso_code, {nullable: true})
+    @ManyToOne(() => CovidInfo, { nullable: true })
     covidInfo?: string;
 
-    @Column({type: 'varchar', length: 64})
+    @Column({ type: 'varchar', length: 64 })
     value: string;
 }

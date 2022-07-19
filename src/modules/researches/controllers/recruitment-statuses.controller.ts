@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ResponseRecruitmentStatusDto } from '@researches/dto/responses';
 import { RecruitmentStatus } from '@researches/entities';
 import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
@@ -12,8 +13,8 @@ export class RecruitmentStatusesController {
 
     @Get()
     @ApiOperation({ summary: '[All] Find `Recruitment statuses`', description: 'Find all the `Recruitment statuses` in the database' })
-    @ApiOkResponse({ type: [RecruitmentStatus], description: 'A collection of every registered `Recruitment statuses` sorted by value' })
-    async findAll(): Promise<ICommonHttpResponse<RecruitmentStatus[]>> {
+    @ApiOkResponse({ type: [ResponseRecruitmentStatusDto], description: 'A collection of every registered `Recruitment statuses` sorted by value' })
+    async findAll(): Promise<ICommonHttpResponse<ResponseRecruitmentStatusDto[]>> {
         const result = await this.recruitmentStatusesService.findAll();
         return {
             data: result,

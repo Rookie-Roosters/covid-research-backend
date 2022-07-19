@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Country } from '@researches/entities';
-import { CreateCountryDto } from '@researches/dto';
+import { CreateCountryDto } from '@researches/dto/creates';
 import { CovidInfoService } from 'src/modules/covid-info/covid-info.service';
 
 @Injectable()

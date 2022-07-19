@@ -4,7 +4,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CovidInfoModule } from '../covid-info/covid-info.module';
 import { PhasesController, RecruitmentStatusesController, SourceRegistersController, StudyTypesController, TargetSizeGroupsController } from './controllers';
-import { TargetSizesController } from './controllers/target-sizes.controller';
 import { Country, Phase, RecruitmentStatus, Research, ResearchCountry, SourceRegister, StudyType, TargetSize, TargetSizeGroup } from './entities';
 import { ResearchesController } from './researches.controller';
 import { ResearchesService } from './researches.service';
@@ -32,7 +31,6 @@ import {
         SourceRegistersController,
         StudyTypesController,
         TargetSizeGroupsController,
-        TargetSizesController,
     ],
     providers: [
         ResearchesService,

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ResponseSourceRegisterDto } from '@researches/dto/responses';
 import { Repository } from 'typeorm';
-import { CreateSourceRegisterDto } from '../dto/create-source-register.dto';
+import { CreateSourceRegisterDto } from '../dto/creates/create-source-register.dto';
 import { SourceRegister } from '../entities/source-register.entity';
 
 @Injectable()
@@ -11,7 +12,7 @@ export class SourceRegistersService {
         private sourceRegisterRepository: Repository<SourceRegister>,
     ) {}
 
-    async create(createSourceRegisterDto: CreateSourceRegisterDto): Promise<SourceRegister> {
+    async create(createSourceRegisterDto: CreateSourceRegisterDto): Promise<ResponseSourceRegisterDto> {
         let sourceRegister: SourceRegister = await this.findByValue(createSourceRegisterDto.value);
         if (!sourceRegister) {
             sourceRegister = await this.sourceRegisterRepository.save(createSourceRegisterDto);
@@ -19,7 +20,7 @@ export class SourceRegistersService {
         return sourceRegister;
     }
 
-    async findAll(): Promise<SourceRegister[]> {
+    async findAll(): Promise<ResponseSourceRegisterDto[]> {
         return await this.sourceRegisterRepository.find({
             order: {
                 value: 'ASC',
@@ -27,11 +28,11 @@ export class SourceRegistersService {
         });
     }
 
-    async findOne(id: number): Promise<SourceRegister> {
+    async findOne(id: number): Promise<ResponseSourceRegisterDto> {
         return await this.sourceRegisterRepository.findOneBy({ id });
     }
 
-    async findByValue(value: string): Promise<SourceRegister> {
+    async findByValue(value: string): Promise<ResponseSourceRegisterDto> {
         return await this.sourceRegisterRepository.createQueryBuilder().where('LOWER(value) = LOWER(:value)', { value }).getOne();
     }
 }
