@@ -25,7 +25,9 @@
             "@bookmarks/*": ["src/modules/bookmarks/*"],
             "@researches/*": ["src/modules/researches/*"],
             "@searches/*": ["src/modules/searches/*"],
-            "@users/*": ["src/modules/users/*"]
+            "@users/*": ["src/modules/users/*"],
+            "@csv/*": ["src/modules/csv/*"],
+            "@covidInfo/*": ["scr/modules/covid-info/*"]
         }
     }
 }
