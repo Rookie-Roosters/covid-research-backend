@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseService } from '@config/database';
 import { UsersModule } from '@users/users.module';
 import { HttpExceptionFilter } from '@utils/filters';
-import { SharedModule } from './shared/shared.module';
 import { GlobalModule } from '@shared/global/global.module';
 import { ResearchesModule } from '@researches/researches.module';
 import { BookmarksModule } from '@bookmarks/bookmarks.module';
@@ -25,8 +24,6 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
         ResearchesModule,
         UsersModule,
         BookmarksModule,
-        SearchesModule,
-        SharedModule,
         CovidInfoModule,
         CovidInfoModule,
         GlobalModule,
