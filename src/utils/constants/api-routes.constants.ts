@@ -1,4 +1,5 @@
 export const API_RESOURCES = {
+    AUTHENTICATION: 'authentication',
     BOOKMARKS: 'bookmarks',
     RESEARCHES: 'researches',
     RESEARCHES_RESOURCES: {
@@ -18,6 +19,11 @@ export const DEFAULT_API_PATHS = {
 };
 
 export const API_ENDPOINTS = {
+    AUTHENTICATION: {
+        BASE_PATH: `/${API_RESOURCES.AUTHENTICATION}`,
+        SIGN_UP: 'sign-up',
+        LOG_IN: 'log-in',
+    },
     BOOKMARKS: {
         BASE_PATH: `/${API_RESOURCES.BOOKMARKS}`,
         BY_ID: DEFAULT_API_PATHS.BY_ID,
