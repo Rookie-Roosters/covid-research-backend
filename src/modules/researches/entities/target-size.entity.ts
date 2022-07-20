@@ -1,18 +1,18 @@
 import { Research } from 'src/modules/researches/entities/research.entity';
 import { TargetSizeGroup } from 'src/modules/researches/entities/target-size-group.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class TargetSize {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ type: Number, nullable: true })
-  count?: number;
+    @Column({ type: Number, nullable: true })
+    count?: number;
 
-  @ManyToOne(() => Research, (research) => research.trialID)
-  research: string;
+    @ManyToOne(() => Research)
+    research: Research;
 
-  @ManyToOne(() => TargetSizeGroup, (targetSizeGroup) => targetSizeGroup.id)
-  targetSizeGroup: number;
+    @ManyToOne(() => TargetSizeGroup, (targetSizeGroup) => targetSizeGroup.id)
+    targetSizeGroup: number;
 }

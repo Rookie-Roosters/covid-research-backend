@@ -1,3 +1,5 @@
+import { USER_ROLES } from '@authentication/constants';
+import { Authenticated } from '@authentication/decorators';
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UserCreateDto, UserUpdateDto } from '@users/dto';
@@ -23,6 +25,7 @@ export class UsersController {
     }
 
     @Get()
+    @Authenticated(USER_ROLES.ADMIN)
     @ApiOperation({ summary: '[Admin] Find `Users`', description: 'Find all the `Users` in the database' })
     @ApiOkResponse({ type: [User], description: 'A collection of every registered `User`' })
     async findAll(): Promise<ICommonHttpResponse<User[]>> {

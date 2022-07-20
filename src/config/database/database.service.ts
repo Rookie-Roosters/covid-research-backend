@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import { GLOBAL_PROVIDERS } from '@shared/global/constants';
 
 @Injectable()
 export class DatabaseService implements TypeOrmOptionsFactory {
@@ -8,7 +9,7 @@ export class DatabaseService implements TypeOrmOptionsFactory {
     private password: string;
     private port: number;
 
-    constructor(private configService: ConfigService) {
+    constructor(private configService: ConfigService, @Inject(GLOBAL_PROVIDERS.IS_DEVELOPMENT_ENV) private readonly isDevelopmentEnv: boolean) {
         this.username = this.configService.get<string>('DATABASE_USER');
         this.password = this.configService.get<string>('DATABASE_PASSWORD');
         this.port = +this.configService.get<number>('DATABASE_PORT');
@@ -23,7 +24,7 @@ export class DatabaseService implements TypeOrmOptionsFactory {
             username: this.username,
             password: this.password,
             autoLoadEntities: true,
-            synchronize: true,
+            synchronize: this.isDevelopmentEnv,
             extra: {
                 trustServerCertificate: true,
             },

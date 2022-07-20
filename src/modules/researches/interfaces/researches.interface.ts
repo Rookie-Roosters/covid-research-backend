@@ -1,5 +1,5 @@
 export interface ResearchInterface {
-  trialID: string;
+  id: string;
   lastRefreshedOn: Date;
   publicTitle: string;
   scientificTitle?: string;
@@ -20,7 +20,7 @@ export interface ResearchInterface {
   studyType: string;
   studyDesign?: string;
   phase?: string;
-  countries?: string;
+  countries: string[];
   contactFirstname?: string;
   contactLastname?: string;
   contactAddress?: string;
