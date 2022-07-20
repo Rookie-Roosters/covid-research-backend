@@ -27,6 +27,7 @@ export const API_ENDPOINTS = {
     BOOKMARKS: {
         BASE_PATH: `/${API_RESOURCES.BOOKMARKS}`,
         BY_ID: DEFAULT_API_PATHS.BY_ID,
+        RESEARCH_BY_ID: `research/${DEFAULT_API_PATHS.BY_ID}`
     },
     RESEARCHES: {
         BASE_PATH: `/${API_RESOURCES.RESEARCHES}`,

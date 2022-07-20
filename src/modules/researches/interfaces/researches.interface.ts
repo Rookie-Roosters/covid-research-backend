@@ -40,4 +40,5 @@ export interface ResearchInterface {
   bridgingFlag: boolean;
   bridgedType: boolean; //true: "parent"
   results: boolean;
+  views?: number;
 }

@@ -8,6 +8,9 @@ import { ResponseStudyTypeDto } from './response-study-type.dto';
 import { ResponseTargetSizeDto } from './response-target-size.dto';
 
 export class ResponseResearchDto extends ResearchDto {
+    @ApiProperty({description: "Research's views"})
+    views: number;
+
     @ApiProperty({description: "Research's recruitment status"})
     recruitmentStatus: ResponseRecruitmentStatusDto;
 
@@ -25,4 +28,15 @@ export class ResponseResearchDto extends ResearchDto {
 
     @ApiProperty({type: () => ResponseResearchCountryDto, isArray: true, description: "Research's countries"})
     countries: ResponseResearchCountryDto[];
+}
+
+export class CompactResponseResearchDto {
+    @ApiProperty({ description: "Research's primary key"})
+    id: string;
+
+    @ApiProperty({ description: "Research's public title", type: String})
+    publicTitle: String;
+
+    @ApiProperty({description: "Research's views"})
+    views: number;
 }

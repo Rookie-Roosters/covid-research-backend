@@ -17,8 +17,8 @@ export class Bookmark {
     @ManyToOne(() => User)
     user: User;
 
-    @ApiProperty({description: "Bookmark's reseaches"})
+    @ApiProperty({description: "Bookmark's researches"})
     @ManyToMany(() => Research)
     @JoinTable()
-    reseaches: Research[];
+    researches: Research[];
 }
