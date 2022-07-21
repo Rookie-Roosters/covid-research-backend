@@ -1,5 +1,5 @@
+import { USER_ROLE } from '@authentication/constants';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
 import { IsEmail, IsInt, IsPositive, IsString, Length } from 'class-validator';
 import { Column, Entity, Index, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from './role.entity';
@@ -34,8 +34,13 @@ export class User {
     @Column({ length: 32 })
     password: string;
 
-    @ApiProperty({ description: "User's roles" })
+    @ApiHideProperty()
     @ManyToMany(() => Role)
     @JoinTable()
     roles: Role[];
+
+    isAdmin(): boolean {
+        const find = this.roles.find((role) => role.name == USER_ROLE.ADMIN);
+        return find !== undefined;
+    }
 }

@@ -17,7 +17,7 @@ export class BookmarksService {
     ) {}
 
     bookmarkToResponse(bookmark: Bookmark): BookmarkResponseDto {
-        let researches: CompactResponseResearchDto[] = [];
+        const researches: CompactResponseResearchDto[] = [];
         if (bookmark.researches) {
             bookmark.researches.map((research) => {
                 researches.push({

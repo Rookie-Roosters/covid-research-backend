@@ -6,7 +6,7 @@ import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { DeleteResult } from 'typeorm';
 import { BookmarkResponseDto } from '@bookmarks/dto/bookmark-response.dto';
 import { Authenticated, CurrentUser } from '@authentication/decorators';
-import { USER_ROLES } from '@authentication/constants';
+import { USER_ROLE } from '@authentication/constants';
 import { User } from '@users/entities';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import to from 'await-to-js';
@@ -17,7 +17,7 @@ export class BookmarksController {
     constructor(private readonly bookmarksService: BookmarksService) {}
 
     @Post()
-    @Authenticated(USER_ROLES.REGULAR)
+    @Authenticated(USER_ROLE.REGULAR)
     @ApiOperation({ summary: '[Regular] Create a `Bookmark`', description: 'Create a new `Bookmark`' })
     @ApiBody({ type: BookmarkCreateDto, description: 'The new `Bookmark` name' })
     @ApiOkResponse({ type: BookmarkResponseDto, description: 'The newly created `Bookmark` model' })
@@ -28,7 +28,7 @@ export class BookmarksController {
     }
 
     @Get(API_ENDPOINTS.BOOKMARKS.BY_ID)
-    @Authenticated(USER_ROLES.REGULAR)
+    @Authenticated(USER_ROLE.REGULAR)
     @ApiOperation({ summary: '[Regular] Get a single `Bookmark`', description: 'Get a single `Bookmark` data based on the provide Id' })
     @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`' Id" })
     @ApiOkResponse({ type: BookmarkResponseDto, description: 'The matching `Bookmark` model' })
@@ -39,7 +39,7 @@ export class BookmarksController {
     }
 
     @Patch(API_ENDPOINTS.BOOKMARKS.BY_ID)
-    @Authenticated(USER_ROLES.REGULAR)
+    @Authenticated(USER_ROLE.REGULAR)
     @ApiOperation({ summary: '[Regular] Update a single `Bookmark` name', description: 'Update a single `Bookmark` name based on the provide Id' })
     @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`' Id" })
     @ApiBody({ type: BookmarkUpdateDto, description: 'The updated `Bookmark` name' })
@@ -56,7 +56,7 @@ export class BookmarksController {
 
     @Delete(API_ENDPOINTS.BOOKMARKS.BY_ID)
     @ApiOperation({ summary: '[Regular] Delete a single `Bookmark`', description: 'Delete a single `Bookmark` data based on the provide Id' })
-    @Authenticated(USER_ROLES.REGULAR)
+    @Authenticated(USER_ROLE.REGULAR)
     @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`' Id" })
     @ApiOkResponse({ type: DeleteResult, description: 'Indicates the result of the deletion' })
     async removeOne(@Param('id') id: number, @CurrentUser() currentUser): Promise<ICommonHttpResponse<DeleteResult>> {
@@ -66,7 +66,7 @@ export class BookmarksController {
     }
 
     @Post(API_ENDPOINTS.BOOKMARKS.RESEARCH_BY_ID)
-    @Authenticated(USER_ROLES.REGULAR)
+    @Authenticated(USER_ROLE.REGULAR)
     @ApiOperation({
         summary: '[Regular] Add a single `Research` in the `Bookmark`',
         description: 'Add a single `Research` in the `Bookmark` based on the provide Id and the Research Id',
@@ -85,7 +85,7 @@ export class BookmarksController {
     }
 
     @Delete(API_ENDPOINTS.BOOKMARKS.RESEARCH_BY_ID)
-    @Authenticated(USER_ROLES.REGULAR)
+    @Authenticated(USER_ROLE.REGULAR)
     @ApiOperation({
         summary: '[Regular] Remove a single `Research` in the `Bookmark`',
         description: 'Remove a single `Research` in the `Bookmark` based on the provide Id and the Research Id',
