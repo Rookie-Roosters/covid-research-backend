@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import { StudyTypesService } from '../services/study-types.service';
 
-@ApiTags('Study types')
+@ApiTags('Researches')
 @Controller(API_ENDPOINTS.RESEARCHES.STUDY_TYPES.BASE_PATH)
 export class StudyTypesController {
     constructor(private readonly studyTypesService: StudyTypesService) {}

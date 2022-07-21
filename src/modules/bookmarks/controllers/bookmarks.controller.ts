@@ -9,7 +9,6 @@ import { Authenticated, CurrentUser } from '@authentication/decorators';
 import { USER_ROLES } from '@authentication/constants';
 import { User } from '@users/entities';
 import { ICommonHttpResponse } from '@utils/interfaces';
-import to from 'await-to-js';
 
 @ApiTags('Bookmarks')
 @Controller(API_ENDPOINTS.BOOKMARKS.BASE_PATH)
@@ -27,10 +26,23 @@ export class BookmarksController {
         };
     }
 
+    @Get(API_ENDPOINTS.BOOKMARKS.USER)
+    @Authenticated(USER_ROLES.REGULAR)
+    @ApiOperation({
+        summary: '[Regular] Get all `Bookmark` of `User`',
+        description: 'Get all `Bookmark` of the logged `User`',
+    })
+    @ApiOkResponse({ type: [BookmarkResponseDto], description: "The `User`'s bookmark models" })
+    async findByUser(@CurrentUser() currentUser: User): Promise<ICommonHttpResponse<BookmarkResponseDto[]>> {
+        return {
+            data: await this.bookmarksService.findByUser(currentUser),
+        };
+    }
+
     @Get(API_ENDPOINTS.BOOKMARKS.BY_ID)
     @Authenticated(USER_ROLES.REGULAR)
     @ApiOperation({ summary: '[Regular] Get a single `Bookmark`', description: 'Get a single `Bookmark` data based on the provide Id' })
-    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`' Id" })
+    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`'s Id" })
     @ApiOkResponse({ type: BookmarkResponseDto, description: 'The matching `Bookmark` model' })
     async findOne(@Param('id') id: number, @CurrentUser() currentUser: User): Promise<ICommonHttpResponse<BookmarkResponseDto>> {
         return {
@@ -41,7 +53,7 @@ export class BookmarksController {
     @Patch(API_ENDPOINTS.BOOKMARKS.BY_ID)
     @Authenticated(USER_ROLES.REGULAR)
     @ApiOperation({ summary: '[Regular] Update a single `Bookmark` name', description: 'Update a single `Bookmark` name based on the provide Id' })
-    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`' Id" })
+    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`'s Id" })
     @ApiBody({ type: BookmarkUpdateDto, description: 'The updated `Bookmark` name' })
     @ApiOkResponse({ type: BookmarkResponseDto, description: 'The updated `Bookmark` model' })
     async updateOne(
@@ -57,7 +69,7 @@ export class BookmarksController {
     @Delete(API_ENDPOINTS.BOOKMARKS.BY_ID)
     @ApiOperation({ summary: '[Regular] Delete a single `Bookmark`', description: 'Delete a single `Bookmark` data based on the provide Id' })
     @Authenticated(USER_ROLES.REGULAR)
-    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`' Id" })
+    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`'s Id" })
     @ApiOkResponse({ type: DeleteResult, description: 'Indicates the result of the deletion' })
     async removeOne(@Param('id') id: number, @CurrentUser() currentUser): Promise<ICommonHttpResponse<DeleteResult>> {
         return {
@@ -71,7 +83,7 @@ export class BookmarksController {
         summary: '[Regular] Add a single `Research` in the `Bookmark`',
         description: 'Add a single `Research` in the `Bookmark` based on the provide Id and the Research Id',
     })
-    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`' Id" })
+    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`'s Id" })
     @ApiBody({ type: BookmarkUpdateResearchDto, description: "The `Research`'s Id" })
     @ApiOkResponse({ type: BookmarkResponseDto, description: 'The updated `Bookmark` model' })
     async addResearch(
@@ -90,7 +102,7 @@ export class BookmarksController {
         summary: '[Regular] Remove a single `Research` in the `Bookmark`',
         description: 'Remove a single `Research` in the `Bookmark` based on the provide Id and the Research Id',
     })
-    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`' Id" })
+    @ApiParam({ name: 'id', type: Number, description: "The `Bookmark`'s Id" })
     @ApiBody({ type: BookmarkUpdateResearchDto, description: "The `Research`'s Id" })
     @ApiOkResponse({ type: BookmarkResponseDto, description: 'The updated `Bookmark` model' })
     async removeResearch(

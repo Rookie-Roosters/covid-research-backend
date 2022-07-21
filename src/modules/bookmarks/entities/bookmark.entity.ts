@@ -1,4 +1,4 @@
-import { ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Research } from '@researches/entities';
 import { User } from '@users/entities';
 import { BaseEntity, Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
@@ -9,15 +9,19 @@ export class Bookmark {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ApiProperty({description: "Bookmark's name"})
-    @Column({type: 'varchar', length: 64})
+    @ApiProperty({ description: "Bookmark's name" })
+    @Column({ type: 'varchar', length: 64 })
     name: string;
 
-    @ApiProperty({description: "Bookmark's user owner"})
+    @ApiProperty({ description: "Bookmark's color" })
+    @Column({ type: 'varchar', length: 7 })
+    color: string;
+
+    @ApiProperty({ description: "Bookmark's user owner" })
     @ManyToOne(() => User)
     user: User;
 
-    @ApiProperty({description: "Bookmark's researches"})
+    @ApiProperty({ description: "Bookmark's researches" })
     @ManyToMany(() => Research)
     @JoinTable()
     researches: Research[];

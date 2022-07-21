@@ -15,11 +15,11 @@ export class CountriesService {
 
     async create(createCountryDto: CreateCountryDto): Promise<Country> {
         let country = await this.findByValue(createCountryDto.value);
-        if(!country) {
+        if (!country) {
             const covidInfo = await this.covidInfoService.findOneByValue(createCountryDto.value);
             country = await this.countryRepository.save({
                 covidInfo: covidInfo ? covidInfo.iso_code : undefined,
-                value: createCountryDto.value
+                value: createCountryDto.value,
             });
         }
         return country;
@@ -33,9 +33,9 @@ export class CountriesService {
         return await this.countryRepository.findOneBy({ id });
     }
 
-    private async findByValue(value: string) : Promise<Country> {
+    private async findByValue(value: string): Promise<Country> {
         return await this.countryRepository.findOneBy({
-            value
+            value,
         });
     }
 }

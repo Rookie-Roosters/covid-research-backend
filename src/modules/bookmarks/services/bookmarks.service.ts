@@ -24,12 +24,14 @@ export class BookmarksService {
                     id: research.id,
                     publicTitle: research.publicTitle,
                     views: research.views,
+                    lastRefreshedOn: research.lastRefreshedOn,
                 });
             });
         }
         return {
             id: bookmark.id,
             name: bookmark.name,
+            color: bookmark.color,
             researches: researches,
         };
     }
@@ -50,6 +52,7 @@ export class BookmarksService {
     async create(createBookmarkDto: BookmarkCreateDto, user: User): Promise<BookmarkResponseDto> {
         const bookmark = await this.bookmarksRepository.save({
             name: createBookmarkDto.name,
+            color: createBookmarkDto.color,
             user: user,
         });
         return this.bookmarkToResponse(bookmark);
@@ -72,10 +75,29 @@ export class BookmarksService {
         } else throw new NotFoundException('Bookmark not found');
     }
 
+    async findByUser(user: User): Promise<BookmarkResponseDto[]> {
+        let bookmarksResponse: BookmarkResponseDto[] = [];
+        const bookmarks = await this.bookmarksRepository.find({
+            where: {
+                user: {
+                    id: user.id,
+                },
+            },
+            relations: {
+                researches: true,
+            },
+        });
+        bookmarks.map((bookmark) => {
+            bookmarksResponse.push(this.bookmarkToResponse(bookmark));
+        });
+        return bookmarksResponse;
+    }
+
     async updateOne(id: number, bookmarkUpdateDto: BookmarkUpdateDto, user: User): Promise<BookmarkResponseDto> {
         if (await this.exists(id, user)) {
             await this.bookmarksRepository.update(id, {
                 name: bookmarkUpdateDto.name,
+                color: bookmarkUpdateDto.color,
             });
             return this.findOne(id, user);
         } else throw new NotFoundException('Bookmark not found');
