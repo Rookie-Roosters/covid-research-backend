@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import { PhasesService } from '../services/phases.service';
 
-@ApiTags('Phases')
+@ApiTags('Researches')
 @Controller(API_ENDPOINTS.RESEARCHES.PHASES.BASE_PATH)
 export class PhasesController {
     constructor(private readonly phasesService: PhasesService) {}

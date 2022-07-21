@@ -11,6 +11,7 @@ import { BookmarksModule } from '@bookmarks/bookmarks.module';
 import { CovidInfoModule } from './modules/covid-info/covid-info.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
+import { HistoriesModule } from './modules/histories/histories.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
         CovidInfoModule,
         GlobalModule,
         AuthenticationModule,
+        HistoriesModule,
     ],
     providers: [
         {

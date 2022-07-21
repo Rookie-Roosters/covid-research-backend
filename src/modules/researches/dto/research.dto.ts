@@ -60,7 +60,10 @@ export class ResearchDto {
     @Max(120)
     inclusionAgeMin?: number; //Is missing check if the other are not null
 
-    @ApiProperty({ description: 'Type age of minium for inclusion of the research', enum: ['years', 'months', 'weeks', 'weeks of pregnacy', 'days', 'hours', 'minutes', 'no limit'] })
+    @ApiProperty({
+        description: 'Type age of minium for inclusion of the research',
+        enum: ['years', 'months', 'weeks', 'weeks of pregnacy', 'days', 'hours', 'minutes', 'no limit'],
+    })
     @IsOptional()
     @IsString()
     @MaxLength(32)
@@ -74,7 +77,10 @@ export class ResearchDto {
     @Max(120)
     inclusionAgeMax?: number; //Is missing check if the other are not null
 
-    @ApiProperty({ description: 'Type age of maximum for inclusion of the research', enum: ['years', 'months', 'weeks', 'weeks of pregnacy', 'days', 'hours', 'minutes', 'no limit'] })
+    @ApiProperty({
+        description: 'Type age of maximum for inclusion of the research',
+        enum: ['years', 'months', 'weeks', 'weeks of pregnacy', 'days', 'hours', 'minutes', 'no limit'],
+    })
     @IsOptional()
     @IsString()
     @MaxLength(32)

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDefined, IsString, MaxLength } from 'class-validator';
 
 export class RecruitmentStatusDto {
-    @ApiProperty({description: "Recruiment Status value"})
+    @ApiProperty({ description: 'Recruiment Status value' })
     @IsDefined()
     @IsString()
     @MaxLength(32)

@@ -43,8 +43,6 @@ import {
         CountriesService,
         ResearchCountriesService,
     ],
-    exports: [
-        ResearchesService,
-    ]
+    exports: [ResearchesService],
 })
 export class ResearchesModule {}

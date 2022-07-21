@@ -167,7 +167,7 @@ export class Research {
     @Column({ type: Boolean })
     results: boolean;
 
-    @ApiProperty({description: "Research's views"})
-    @Column({type: Number, default: 0})
+    @ApiProperty({ description: "Research's views" })
+    @Column({ type: Number, default: 0 })
     views?: number;
 }

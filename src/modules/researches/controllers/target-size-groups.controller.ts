@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import { TargetSizeGroupsService } from '../services/target-size-groups.service';
 
-@ApiTags('Target size groups')
+@ApiTags('Researches')
 @Controller(API_ENDPOINTS.RESEARCHES.TARGET_SIZE_GROUPS.BASE_PATH)
 export class TargetSizeGroupsController {
     constructor(private readonly targetSizeGroupsService: TargetSizeGroupsService) {}
