@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import { SourceRegistersService } from '../services/source-registers.service';
 
-@ApiTags('Source registers')
+@ApiTags('Researches')
 @Controller(API_ENDPOINTS.RESEARCHES.SOURCE_REGISTERS.BASE_PATH)
 export class SourceRegistersController {
     constructor(private readonly sourceRegistersService: SourceRegistersService) {}

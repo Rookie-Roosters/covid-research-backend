@@ -12,10 +12,12 @@ export const API_RESOURCES = {
     },
     SEARCHES: 'searches',
     USERS: 'users',
+    HISTORIES: 'histories',
 };
 
 export const DEFAULT_API_PATHS = {
     BY_ID: ':id',
+    USER: 'user',
 };
 
 export const API_ENDPOINTS = {
@@ -27,6 +29,8 @@ export const API_ENDPOINTS = {
     BOOKMARKS: {
         BASE_PATH: `/${API_RESOURCES.BOOKMARKS}`,
         BY_ID: DEFAULT_API_PATHS.BY_ID,
+        RESEARCH_BY_ID: `research/${DEFAULT_API_PATHS.BY_ID}`,
+        USER: DEFAULT_API_PATHS.USER,
     },
     RESEARCHES: {
         BASE_PATH: `/${API_RESOURCES.RESEARCHES}`,
@@ -58,5 +62,10 @@ export const API_ENDPOINTS = {
     USERS: {
         BASE_PATH: `/${API_RESOURCES.USERS}`,
         BY_ID: DEFAULT_API_PATHS.BY_ID,
+    },
+    HISTORIES: {
+        BASE_PATH: `/${API_RESOURCES.HISTORIES}`,
+        BY_ID: DEFAULT_API_PATHS.BY_ID,
+        USER: DEFAULT_API_PATHS.USER,
     },
 };

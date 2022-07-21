@@ -64,35 +64,38 @@ export class ResearchesService {
     }
 
     async findOneById(id: string): Promise<Research> {
-        const research = await this.researchRespository.findOneBy({ id });
-        if (!research) throw new NotFoundException(`Research with id ${id} not found`);
-        return research;
+        if (await this.existsId(id)) {
+            const research = await this.researchRespository.findOneBy({ id });
+            if (!research) throw new NotFoundException(`Research with id ${id} not found`);
+            return research;
+        } else throw new NotFoundException('Research not found');
     }
 
     async findOne(id: string): Promise<ResponseResearchDto> | null {
-        const [err, research] = await to(
-            this.researchRespository.findOne({
-                where: {
-                    id,
-                },
-                relations: {
-                    recruitmentStatus: true,
-                    phase: true,
-                    sourceRegister: true,
-                    studyType: true,
-                },
-            }),
-        );
-        if (research) {
+        if (await this.existsId(id)) {
+            const [err, research] = await to(
+                this.researchRespository.findOne({
+                    where: {
+                        id,
+                    },
+                    relations: {
+                        recruitmentStatus: true,
+                        phase: true,
+                        sourceRegister: true,
+                        studyType: true,
+                    },
+                }),
+            );
             const responseResearch: ResponseResearchDto = new ResponseResearchDto();
             for (const attr in research) {
                 responseResearch[attr] = research[attr];
             }
             responseResearch.targetSizes = await this.targetSizesService.findByResearch(responseResearch.id);
             responseResearch.countries = await this.researchCountriesService.findByResearch(responseResearch.id);
+            research.views++;
+            this.researchRespository.save(research);
             return responseResearch;
-        }
-        return null;
+        } else throw new NotFoundException('Research not found');
     }
 
     private async getCleanResearch(createResearchDto: CreateResearchDto): Promise<Research> {
@@ -202,5 +205,15 @@ export class ResearchesService {
             }
         }
         return research;
+    }
+
+    async existsId(id: string): Promise<boolean> {
+        const count = await this.researchRespository.count({
+            where: {
+                id,
+            },
+        });
+        if (count == 0) return false;
+        return true;
     }
 }

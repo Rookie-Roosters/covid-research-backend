@@ -62,7 +62,7 @@ export class TargetSizesService {
                 },
             }),
         );
-        if(res) return res as unknown as ResponseTargetSizeDto[];
+        if (res) return res as unknown as ResponseTargetSizeDto[];
     }
 
     private async findByValues(researchId: string, targetSizeGroup?: number): Promise<TargetSize> {

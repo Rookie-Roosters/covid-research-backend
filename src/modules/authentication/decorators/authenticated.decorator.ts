@@ -1,13 +1,9 @@
-import { USER_ROLES } from '@authentication/constants';
-import { JwtAuthGuard } from '@authentication/guards';
-import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common';
+import { USER_ROLE } from '@authentication/constants';
+import { JwtAuthGuard, RolesGuard } from '@authentication/guards';
+import { applyDecorators, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Roles } from './roles.decorator';
 
-export function Authenticated(...roles: USER_ROLES[]) {
-    return applyDecorators(
-        ApiBearerAuth(),
-        SetMetadata('roles', roles),
-        UseGuards(JwtAuthGuard), //AuthGuard, RolesGuard
-        ApiUnauthorizedResponse(),
-    );
+export function Authenticated(...roles: USER_ROLE[]) {
+    return applyDecorators(ApiBearerAuth(), Roles(...roles), UseGuards(JwtAuthGuard, RolesGuard), ApiUnauthorizedResponse());
 }

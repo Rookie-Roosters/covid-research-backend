@@ -6,7 +6,7 @@ import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import { RecruitmentStatusesService } from '../services/recruitment-statuses.service';
 
-@ApiTags('Recruitment statuses')
+@ApiTags('Researches')
 @Controller(API_ENDPOINTS.RESEARCHES.RECRUITMENT_STATUSES.BASE_PATH)
 export class RecruitmentStatusesController {
     constructor(private readonly recruitmentStatusesService: RecruitmentStatusesService) {}
