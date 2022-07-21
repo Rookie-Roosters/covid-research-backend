@@ -43,5 +43,8 @@ import {
         CountriesService,
         ResearchCountriesService,
     ],
+    exports: [
+        ResearchesService,
+    ]
 })
 export class ResearchesModule {}

@@ -166,4 +166,8 @@ export class Research {
     @ApiProperty({ description: 'There are results of the research' })
     @Column({ type: Boolean })
     results: boolean;
+
+    @ApiProperty({description: "Research's views"})
+    @Column({type: Number, default: 0})
+    views?: number;
 }
