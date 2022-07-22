@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDefined, IsString, IsUrl, MaxLength } from 'class-validator';
 
 export class HistoryDto {
-    @ApiProperty({ description: "History's url", type: String })
+    @ApiProperty({ description: "Search record url", type: String })
     @IsString()
     @IsDefined()
     @IsUrl()

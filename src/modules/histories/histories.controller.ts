@@ -9,7 +9,7 @@ import { User } from '@users/entities';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import { DeleteResult } from 'typeorm';
 
-@ApiTags('Histories')
+@ApiTags('Search Records')
 @Controller(API_ENDPOINTS.HISTORIES.BASE_PATH)
 export class HistoriesController {
     constructor(private readonly historiesService: HistoriesService) {}
@@ -17,10 +17,10 @@ export class HistoriesController {
     @Get(API_ENDPOINTS.HISTORIES.USER)
     @Authenticated(USER_ROLE.REGULAR)
     @ApiOperation({
-        summary: '[Regular] Get all `History` of `User`',
-        description: 'Get all `History` of the logged `User`',
+        summary: '[Regular] Get all `Search record` of `User`',
+        description: 'Get all `Search record` of the logged `User`',
     })
-    @ApiOkResponse({ type: [ResponseHistoryDto], description: "The `User`'s history models" })
+    @ApiOkResponse({ type: [ResponseHistoryDto], description: "The `User`'s Search record models" })
     async findByUser(@CurrentUser() currentUser: User): Promise<ICommonHttpResponse<ResponseHistoryDto[]>> {
         return {
             data: await this.historiesService.findByUser(currentUser),
@@ -28,9 +28,9 @@ export class HistoriesController {
     }
 
     @Delete(API_ENDPOINTS.HISTORIES.BY_ID)
-    @ApiOperation({ summary: '[Regular] Delete a single `History`', description: 'Delete a single `History` data based on the provide Id' })
+    @ApiOperation({ summary: '[Regular] Delete a single `Search record`', description: 'Delete a single `Search record` data based on the provide Id' })
     @Authenticated(USER_ROLE.REGULAR)
-    @ApiParam({ name: 'id', type: Number, description: "The `History`'s Id" })
+    @ApiParam({ name: 'id', type: Number, description: "The `Search record`'s Id" })
     @ApiOkResponse({ type: DeleteResult, description: 'Indicates the result of the deletion' })
     async removeOne(@Param('id') id: number, @CurrentUser() currentUser): Promise<ICommonHttpResponse<DeleteResult>> {
         return {

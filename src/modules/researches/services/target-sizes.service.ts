@@ -35,7 +35,7 @@ export class TargetSizesService {
             targetSize = await this.targetSizeRepository.save({
                 count: createTargetSizeDto.count,
                 research: research,
-                targetSizeGroup: targetSizeGroup ? targetSizeGroup.id : undefined,
+                targetSizeGroup: targetSizeGroup,
             });
         }
         return targetSize;

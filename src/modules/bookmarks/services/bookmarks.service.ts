@@ -5,7 +5,7 @@ import { Bookmark } from '@bookmarks/entities';
 import { DeleteResult, Repository } from 'typeorm';
 import { User } from '@users/entities';
 import { BookmarkResponseDto } from '@bookmarks/dto/bookmark-response.dto';
-import { ResearchesService } from '@researches/researches.service';
+import { ResearchesService } from '@researches/services/researches.service';
 import { CompactResponseResearchDto } from '@researches/dto/responses';
 
 @Injectable()
@@ -25,6 +25,8 @@ export class BookmarksService {
                     publicTitle: research.publicTitle,
                     views: research.views,
                     lastRefreshedOn: research.lastRefreshedOn,
+                    primarySponsor: research.primarySponsor,
+                    webAddress: research.webAddress,
                 });
             });
         }

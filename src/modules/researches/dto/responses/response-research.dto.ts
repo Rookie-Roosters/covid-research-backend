@@ -42,4 +42,10 @@ export class CompactResponseResearchDto {
 
     @ApiProperty({ description: "Research's views", type: Number })
     views: number;
+
+    @ApiProperty({description: "Research's primary sponsor"})
+    primarySponsor: string;
+
+    @ApiProperty({description: "Research's web address"})
+    webAddress: string;
 }

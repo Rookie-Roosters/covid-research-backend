@@ -4,11 +4,11 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PATHS } from '@utils/constants/paths.constants';
 import { Repository } from 'typeorm';
-import { CreateResearchDto } from './dto/creates';
-import { ResponseResearchDto } from './dto/responses/response-research.dto';
-import { Research } from './entities';
-import { ResearchInterface } from './interfaces/researches.interface';
-import { PhasesService, RecruitmentStatusesService, ResearchCountriesService, SourceRegistersService, StudyTypesService, TargetSizesService } from './services';
+import { CreateResearchDto } from '../dto/creates';
+import { ResponseResearchDto } from '../dto/responses/response-research.dto';
+import { Research } from '../entities';
+import { ResearchInterface } from '../interfaces/researches.interface';
+import { PhasesService, RecruitmentStatusesService, ResearchCountriesService, SourceRegistersService, StudyTypesService, TargetSizesService } from '.';
 import to from 'await-to-js';
 import { NotFoundException } from '@nestjs/common';
 

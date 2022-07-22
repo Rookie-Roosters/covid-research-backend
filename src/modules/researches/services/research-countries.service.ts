@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateResearchCountryDto } from '@researches/dto/creates';
 import { ResponseResearchCountryDto } from '@researches/dto/responses';
 import { Research, ResearchCountry } from '@researches/entities';
-import { ResearchesService } from '@researches/researches.service';
+import { ResearchesService } from '@researches/services/researches.service';
 import to from 'await-to-js';
 import { Repository } from 'typeorm';
 import { CountriesService } from './countries.service';
