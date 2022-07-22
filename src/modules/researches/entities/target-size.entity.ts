@@ -13,6 +13,6 @@ export class TargetSize {
     @ManyToOne(() => Research)
     research: Research;
 
-    @ManyToOne(() => TargetSizeGroup, (targetSizeGroup) => targetSizeGroup.id)
-    targetSizeGroup: number;
+    @ManyToOne(() => TargetSizeGroup)
+    targetSizeGroup: TargetSizeGroup;
 }

@@ -10,9 +10,9 @@ export const API_RESOURCES = {
         TARGET_SIZE_GROUPS: 'target-size-groups',
         TARGET_SIZES: 'target-sizes',
     },
-    SEARCHES: 'searches',
+    SEARCH: 'search',
     USERS: 'users',
-    HISTORIES: 'histories',
+    HISTORIES: 'search-records',
 };
 
 export const DEFAULT_API_PATHS = {
@@ -55,9 +55,8 @@ export const API_ENDPOINTS = {
             BASE_PATH: `/${API_RESOURCES.RESEARCHES_RESOURCES.TARGET_SIZES}`,
         },
     },
-    SEARCHES: {
-        BASE_PATH: `/${API_RESOURCES.SEARCHES}`,
-        BY_ID: DEFAULT_API_PATHS.BY_ID,
+    SEARCH: {
+        BASE_PATH: `/${API_RESOURCES.SEARCH}`,
     },
     USERS: {
         BASE_PATH: `/${API_RESOURCES.USERS}`,
