@@ -3,14 +3,18 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PATHS } from '@utils/constants/paths.constants';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateResearchDto } from '../dto/creates';
 import { ResponseResearchDto } from '../dto/responses/response-research.dto';
-import { Research } from '../entities';
+import { Country, Research, ResearchCountry, StudyType } from '../entities';
 import { ResearchInterface } from '../interfaces/researches.interface';
 import { PhasesService, RecruitmentStatusesService, ResearchCountriesService, SourceRegistersService, StudyTypesService, TargetSizesService } from '.';
 import to from 'await-to-js';
 import { NotFoundException } from '@nestjs/common';
+import { StatisticsService } from './statistics.service';
+import { CovidInfoService } from '@covid-info/covid-info.service';
+import { ResponseStatisticsDto, ResponseStatsByCountry } from '@researches/dto/responses';
+import { CovidInfoDto } from '@covid-info/dto/covid-info.dto';
 
 @Injectable()
 export class ResearchesService {
@@ -22,8 +26,14 @@ export class ResearchesService {
         private phasesService: PhasesService,
         private targetSizesService: TargetSizesService,
         private researchCountriesService: ResearchCountriesService,
+        private statisticsService: StatisticsService,
+        private covidInfoService: CovidInfoService,
         @InjectRepository(Research)
         private researchRespository: Repository<Research>,
+        @InjectRepository(Country)
+        private countriesRepository: Repository<Country>,
+        @InjectRepository(ResearchCountry)
+        private researchCountriesRepository: Repository<ResearchCountry>,
     ) {}
 
     @Cron(CronExpression.EVERY_HOUR)
@@ -135,34 +145,26 @@ export class ResearchesService {
             bridgingFlag: createResearchDto.bridgingFlag,
             bridgedType: createResearchDto.bridgedType,
             results: createResearchDto.results,
-            studyType: 0,
+            studyType: new StudyType(),
         };
 
         if (createResearchDto.sourceRegister) {
-            research.sourceRegister = (
-                await this.sourceRegistersService.create({
-                    value: this.csvService.getProcessedString(createResearchDto.sourceRegister),
-                })
-            ).id;
+            research.sourceRegister = await this.sourceRegistersService.create({
+                value: this.csvService.getProcessedString(createResearchDto.sourceRegister),
+            });
         }
         if (createResearchDto.recruitmentStatus) {
-            research.recruitmentStatus = (
-                await this.recruitmentStatusesService.create({
-                    value: this.csvService.getProcessedString(createResearchDto.recruitmentStatus),
-                })
-            ).id;
+            research.recruitmentStatus = await this.recruitmentStatusesService.create({
+                value: this.csvService.getProcessedString(createResearchDto.recruitmentStatus),
+            });
         }
-        research.studyType = (
-            await this.studyTypesService.create({
-                value: this.csvService.getStudyType(createResearchDto.studyType),
-            })
-        ).id;
+        research.studyType = await this.studyTypesService.create({
+            value: this.csvService.getStudyType(createResearchDto.studyType),
+        });
         if (createResearchDto.phase) {
-            research.phase = (
-                await this.phasesService.create({
-                    value: this.csvService.transformPhaseNull(createResearchDto.phase),
-                })
-            ).id;
+            research.phase = await this.phasesService.create({
+                value: this.csvService.transformPhaseNull(createResearchDto.phase),
+            });
         }
         return research;
     }
@@ -172,33 +174,25 @@ export class ResearchesService {
         for (const attr in createResearchDto) {
             if (attr == 'sourceRegister') {
                 if (createResearchDto.sourceRegister) {
-                    research.sourceRegister = (
-                        await this.sourceRegistersService.create({
-                            value: createResearchDto.sourceRegister,
-                        })
-                    ).id;
+                    research.sourceRegister = await this.sourceRegistersService.create({
+                        value: createResearchDto.sourceRegister,
+                    });
                 }
             } else if (attr == 'recruitmentStatus') {
                 if (createResearchDto.recruitmentStatus) {
-                    research.recruitmentStatus = (
-                        await this.recruitmentStatusesService.create({
-                            value: createResearchDto.recruitmentStatus,
-                        })
-                    ).id;
+                    research.recruitmentStatus = await this.recruitmentStatusesService.create({
+                        value: createResearchDto.recruitmentStatus,
+                    });
                 }
             } else if (attr == 'studyType') {
-                research.studyType = (
-                    await this.studyTypesService.create({
-                        value: createResearchDto.studyType,
-                    })
-                ).id;
+                research.studyType = await this.studyTypesService.create({
+                    value: createResearchDto.studyType,
+                });
             } else if (attr == 'phase') {
                 if (createResearchDto.phase) {
-                    research.phase = (
-                        await this.phasesService.create({
-                            value: createResearchDto.phase,
-                        })
-                    ).id;
+                    research.phase = await this.phasesService.create({
+                        value: createResearchDto.phase,
+                    });
                 }
             } else {
                 research[attr] = createResearchDto[attr];
@@ -215,5 +209,55 @@ export class ResearchesService {
         });
         if (count == 0) return false;
         return true;
+    }
+
+    async statsByCountry(countriesIsoCodes: string[]): Promise<ResponseStatsByCountry[]> {
+        let countryStatistics: {isoCode: string, covidInfo: CovidInfoDto, statistics: ResponseStatisticsDto}[] = await Promise.all(
+            countriesIsoCodes.map(async (countryIsoCode) => {
+                const covidInfo = await this.covidInfoService.findOne(countryIsoCode);
+                if (covidInfo) {
+                    const country = await this.countriesRepository.findOne({
+                        where: {
+                            covidInfo: {
+                                iso_code: covidInfo.iso_code,
+                            },
+                        },
+                    });
+                    let statistics: ResponseStatisticsDto = undefined;
+                    if (country) {
+                        const researches = (
+                            await this.researchCountriesRepository.find({
+                                select: {
+                                    research: {
+                                        id: true,
+                                    },
+                                },
+                                where: {
+                                    country: {
+                                        id: country.id,
+                                    },
+                                },
+                                relations: {
+                                    research: true,
+                                },
+                            })
+                        ).map((researchCountry) => researchCountry.research.id);
+                        if (researches.length > 0) statistics = await this.statisticsService.statistics(researches);
+                    }
+                    return {
+                        isoCode: covidInfo.iso_code,
+                        covidInfo: covidInfo,
+                        statistics,
+                    };
+                }
+            }),
+        );
+        while (countryStatistics.findIndex((value) => value == undefined) != -1) {
+            countryStatistics.splice(
+                countryStatistics.findIndex((value) => value == undefined),
+                1,
+            );
+        }
+        return countryStatistics;
     }
 }

@@ -7,7 +7,7 @@ export class Country {
     id: number;
 
     @ManyToOne(() => CovidInfo, { nullable: true })
-    covidInfo?: string;
+    covidInfo?: CovidInfo;
 
     @Column({ type: 'varchar', length: 64 })
     value: string;
