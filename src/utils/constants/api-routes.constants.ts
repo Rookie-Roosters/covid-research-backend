@@ -37,6 +37,7 @@ export const API_ENDPOINTS = {
         BY_ID: DEFAULT_API_PATHS.BY_ID,
         UPDATE_DB: '/update-db',
         STATS_BY_COUNTRY: '/stats-by-country',
+        WORLD_STATS: '/world-stats',
         PHASES: {
             BASE_PATH: `/${API_RESOURCES.RESEARCHES_RESOURCES.PHASES}`,
         },

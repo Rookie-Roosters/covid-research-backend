@@ -1,7 +1,6 @@
-import { CovidInfoDto } from '@covid-info/dto/covid-info.dto';
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ResponseStatsByCountry } from '@researches/dto/responses';
+import { ResponseStatsByCountry, ResponseWorldStats } from '@researches/dto/responses';
 import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import { ResponseResearchDto } from '../dto/responses/response-research.dto';
@@ -20,16 +19,30 @@ export class ResearchesController {
     async updateDB(): Promise<void> {
         await this.researchesService.updateAll();
     }
-    
+
     @Get(API_ENDPOINTS.RESEARCHES.STATS_BY_COUNTRY)
     @ApiOperation({
-        summary: '[All] Get counts of the information in `Research` of the `Countries`',
-        description: 'Get counts of the information in `Research` based on the provide `Country` ISO codes'
+        summary: '[All] Get counts of the information in `Research` of the `Countries` Iso codes',
+        description: 'Get counts of the information in `Research` based on the provide `Country` ISO codes, if Query is blank will select all researches',
     })
-    @ApiQuery({name: 'countryIsoCodes', description: 'Country ISO codes', type: [String]})
-    @ApiResponse({type: ResponseStatsByCountry})
-    async statsByCountry(@Query('countryIsoCodes') countriesIsoCodes: string[]) {
-        return await this.researchesService.statsByCountry(countriesIsoCodes);
+    @ApiQuery({ name: 'countryIsoCodes', description: 'Country ISO codes', type: [String], required: false })
+    @ApiResponse({ type: [ResponseStatsByCountry] })
+    async statsByCountry(@Query('countryIsoCodes') countriesIsoCodes: string[]) : Promise<ICommonHttpResponse<ResponseStatsByCountry[]>> {
+        return {
+            data: await this.researchesService.statsByCountry(countriesIsoCodes),
+        }
+    }
+
+    @Get(API_ENDPOINTS.RESEARCHES.WORLD_STATS)
+    @ApiOperation({
+        summary: '[All] Get counts of the all `Countries`',
+        description: 'Get counts of the all information about `Covid Info` and `Researches`',
+    })
+    @ApiResponse({type: [ResponseWorldStats]})
+    async worldStats() : Promise<ICommonHttpResponse<ResponseWorldStats[]>> {
+        return {
+            data: await this.researchesService.worldStats(),
+        }
     }
 
     @Get(API_ENDPOINTS.USERS.BY_ID)

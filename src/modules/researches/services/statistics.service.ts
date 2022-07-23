@@ -1,6 +1,8 @@
+import { CovidInfo } from '@covid-info/entities/covid-info.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Phase, RecruitmentStatus, Research, SourceRegister, StudyType, TargetSize, TargetSizeGroup } from '@researches/entities';
+import { ResponseWorldStats } from '@researches/dto/responses/response-world-stats.dto';
+import { Country, Phase, RecruitmentStatus, Research, ResearchCountry, SourceRegister, StudyType, TargetSize, TargetSizeGroup } from '@researches/entities';
 import { StatisticsInterface } from '@researches/interfaces/statistics.interface';
 import { Between, In, IsNull, MoreThanOrEqual, Repository } from 'typeorm';
 
@@ -21,6 +23,12 @@ export class StatisticsService {
         private targetSizesRespository: Repository<TargetSize>,
         @InjectRepository(TargetSizeGroup)
         private targetSizeGroupsRespository: Repository<TargetSizeGroup>,
+        @InjectRepository(Country)
+        private countriesRespository: Repository<Country>,
+        @InjectRepository(CovidInfo)
+        private covidInfoRespository: Repository<CovidInfo>,
+        @InjectRepository(ResearchCountry)
+        private researchCountriesRespository: Repository<ResearchCountry>,
     ) {}
 
     private async inclusionGenderStatistics(researchIds: string[]): Promise<{ male: number; female: number; both: number; null: number }> {
@@ -589,6 +597,63 @@ export class StatisticsService {
         response.sourceRegister = response.sourceRegister.sort((a, b) => b.count - a.count).slice(0, 5);
         response.studyType = response.studyType.sort((a, b) => b.count - a.count).slice(0, 5);
         response.targetSize = response.targetSize.sort((a, b) => b.count - a.count).slice(0, 5);
+        return response;
+    }
+
+    async worldCovidData() : Promise<ResponseWorldStats[]>{
+        const covidInfos = await this.covidInfoRespository.find({
+            select: ['iso_code', 'total_cases', 'total_deaths', 'total_vaccinations', 'population', 'population_density'],
+        });
+        const response = await Promise.all(covidInfos.map(async covidInfo => {
+            const country = await this.countriesRespository.findOne({
+                where: {
+                    covidInfo: {
+                        iso_code: covidInfo.iso_code,
+                    },
+                },
+            });
+            let count = 0;
+            let views = 0;
+            if (country) {
+                const researchIds = (
+                    await this.researchCountriesRespository.find({
+                        where: {
+                            country: {
+                                id: country.id,
+                            },
+                        },
+                        relations: {
+                            research: true,
+                        },
+                    })
+                ).map((researchCountry) => researchCountry.research.id);
+                count = researchIds.length;
+                if (researchIds.length > 0) {
+                    let researchInIds = ' IN (';
+                    researchIds.map((id) => {
+                        researchInIds += `'${id}',`;
+                    });
+                    researchInIds = researchInIds.slice(0, -1) + ')';
+                    views = (
+                        await this.researchRespository
+                            .createQueryBuilder('research')
+                            .select('SUM(research.views) as sum')
+                            .where('research.id' + researchInIds)
+                            .getRawOne()
+                    ).sum;
+                }
+            }
+            return {
+                count,
+                views,
+                'iso_code': covidInfo.iso_code,
+                'total_cases': covidInfo.total_cases,
+                'total_deaths': covidInfo.total_deaths, 
+                'total_vaccinations': covidInfo.total_vaccinations, 
+                'population': covidInfo.population, 
+                'population_density': covidInfo.population_density
+            }
+        }));
         return response;
     }
 }

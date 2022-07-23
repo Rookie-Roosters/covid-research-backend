@@ -3,10 +3,11 @@ import { ResearchInterface } from '../researches/interfaces/researches.interface
 import { parseFile } from 'fast-csv';
 import * as fs from 'fs';
 import * as https from 'https';
-import * as csv from 'csv-parser';
+// import * as csv from 'csv-parser';
 import * as puppeteer from 'puppeteer';
 import { CovidInfoInterface } from '../covid-info/interfaces/covid-info.interface';
 import { join } from 'path';
+import csvParser from 'csv-parser';
 
 @Injectable()
 export class CsvService {
@@ -463,7 +464,7 @@ export class CsvService {
                     console.log('covid data csv read satarted');
                     await fs
                         .createReadStream(join(path, 'covid-data.txt'))
-                        .pipe(csv())
+                        .pipe(csvParser())
                         .on('data', (data) => {
                             //mssql doesn't automatically convert empty strings to NULL values (and thus, are not accepted in the int and float fields of the database).
                             //it needs to be previously done here:
