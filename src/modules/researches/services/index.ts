@@ -8,3 +8,4 @@ export * from './target-sizes.service';
 export * from './research-countries.service';
 export * from './researches.service';
 export * from './search.service';
+export * from './statistics.service';

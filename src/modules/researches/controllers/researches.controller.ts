@@ -1,5 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { CovidInfoDto } from '@covid-info/dto/covid-info.dto';
+import { Controller, Get, Param, Query } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ResponseStatsByCountry } from '@researches/dto/responses';
 import { API_ENDPOINTS } from '@utils/constants/api-routes.constants';
 import { ICommonHttpResponse } from '@utils/interfaces';
 import { ResponseResearchDto } from '../dto/responses/response-research.dto';
@@ -17,6 +19,17 @@ export class ResearchesController {
     })
     async updateDB(): Promise<void> {
         await this.researchesService.updateAll();
+    }
+    
+    @Get(API_ENDPOINTS.RESEARCHES.STATS_BY_COUNTRY)
+    @ApiOperation({
+        summary: '[All] Get counts of the information in `Research` of the `Countries`',
+        description: 'Get counts of the information in `Research` based on the provide `Country` ISO codes'
+    })
+    @ApiQuery({name: 'countryIsoCodes', description: 'Country ISO codes', type: [String]})
+    @ApiResponse({type: ResponseStatsByCountry})
+    async statsByCountry(@Query('countryIsoCodes') countriesIsoCodes: string[]) {
+        return await this.researchesService.statsByCountry(countriesIsoCodes);
     }
 
     @Get(API_ENDPOINTS.USERS.BY_ID)

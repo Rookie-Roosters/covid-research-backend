@@ -36,20 +36,20 @@ export class Research {
     dateRegistration?: Date;
 
     @ApiProperty({ description: "Research's source register id" })
-    @ManyToOne(() => SourceRegister, (sourceRegister) => sourceRegister.id, {
+    @ManyToOne(() => SourceRegister, {
         nullable: true,
     })
-    sourceRegister?: number;
+    sourceRegister?: SourceRegister;
 
     @ApiProperty({ description: "Research's web address" })
     @Column({ type: String, length: 128 })
     webAddress: string;
 
     @ApiProperty({ description: "Research's id recruitment status" })
-    @ManyToOne(() => RecruitmentStatus, (recruitmentStatus) => recruitmentStatus.id, {
+    @ManyToOne(() => RecruitmentStatus, {
         nullable: true,
     })
-    recruitmentStatus?: number;
+    recruitmentStatus?: RecruitmentStatus;
 
     @ApiProperty({ description: 'There are other records of the research' })
     @Column({ type: Boolean })
@@ -80,16 +80,16 @@ export class Research {
     dateEnrollement?: Date;
 
     @ApiProperty({ description: "Research's is study type" })
-    @ManyToOne(() => StudyType, (studyType) => studyType.id)
-    studyType: number;
+    @ManyToOne(() => StudyType)
+    studyType: StudyType;
 
     @ApiProperty({ description: "Research's study design" })
     @Column({ type: String, length: 1024, nullable: true })
     studyDesign?: string;
 
     @ApiProperty({ description: "Research's id phase" })
-    @ManyToOne(() => Phase, (phase) => phase.id)
-    phase?: number;
+    @ManyToOne(() => Phase)
+    phase?: Phase;
 
     @ApiProperty({ description: "Research's contact first name" })
     @Column({ type: String, length: 128, nullable: true })

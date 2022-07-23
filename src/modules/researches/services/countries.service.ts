@@ -18,7 +18,7 @@ export class CountriesService {
         if (!country) {
             const covidInfo = await this.covidInfoService.findOneByValue(createCountryDto.value);
             country = await this.countryRepository.save({
-                covidInfo: covidInfo ? covidInfo.iso_code : undefined,
+                covidInfo: covidInfo,
                 value: createCountryDto.value,
             });
         }

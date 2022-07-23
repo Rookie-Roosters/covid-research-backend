@@ -24,6 +24,7 @@ import {
     TargetSizeGroupsService,
     TargetSizesService,
 } from './services';
+import { StatisticsService } from './services/statistics.service';
 
 @Module({
     imports: [
@@ -51,6 +52,7 @@ import {
         CountriesService,
         ResearchCountriesService,
         SearchService,
+        StatisticsService,
     ],
     exports: [ResearchesService],
 })

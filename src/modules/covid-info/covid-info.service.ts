@@ -16,12 +16,10 @@ export class CovidInfoService {
     }
 
     findOne(iso_code: string): Promise<CovidInfo> {
-        try {
-            const covidInfo = this.covidInfoRepository.findOneOrFail({
-                where: { iso_code: iso_code },
-            });
-            return covidInfo;
-        } catch (err) {}
+        const covidInfo = this.covidInfoRepository.findOne({
+            where: { iso_code: iso_code },
+        });
+        return covidInfo;
     }
 
     @Cron(CronExpression.EVERY_HOUR)
