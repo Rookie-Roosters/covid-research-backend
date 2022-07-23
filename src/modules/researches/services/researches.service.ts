@@ -16,6 +16,7 @@ import { CovidInfoService } from '@covid-info/covid-info.service';
 import { ResponseStatisticsDto, ResponseStatsByCountry } from '@researches/dto/responses';
 import { CovidInfoDto } from '@covid-info/dto/covid-info.dto';
 import globalStats from '../jsons/global-stats.json';
+import { ResponseWorldStats } from '@researches/dto/responses/response-world-stats.dto';
 
 @Injectable()
 export class ResearchesService {
@@ -270,5 +271,9 @@ export class ResearchesService {
             }
             return countryStatistics;
         }
+    }
+
+    async worldStats() : Promise<ResponseWorldStats[]> {
+        return this.statisticsService.worldCovidData();
     }
 }

@@ -25,10 +25,11 @@ import {
     TargetSizesService,
 } from './services';
 import { StatisticsService } from './services/statistics.service';
+import { CovidInfo } from '@covid-info/entities/covid-info.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Research, SourceRegister, RecruitmentStatus, TargetSize, TargetSizeGroup, StudyType, Phase, Country, ResearchCountry]),
+        TypeOrmModule.forFeature([Research, SourceRegister, RecruitmentStatus, TargetSize, TargetSizeGroup, StudyType, Phase, Country, ResearchCountry, CovidInfo]),
         CsvModule,
         CovidInfoModule,
     ],
