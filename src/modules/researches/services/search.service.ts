@@ -181,32 +181,22 @@ export class SearchService {
                 if (researchIds.findIndex((r) => r == research.id) == -1) researchIds.push(research.id);
             });
             whereQuery = 'id IN(';
-            researchIds.map(id => {
+            researchIds.map((id) => {
                 whereQuery += `'${id}',`;
             });
             whereQuery = whereQuery.slice(0, -1) + ')';
 
             const queryBuilder = this.researchesRepository.createQueryBuilder('research');
-            queryBuilder.select([
-                    'research.id',
-                    'research.publicTitle',
-                    'research.lastRefreshedOn',
-                    'research.views',
-                    'research.primarySponsor',
-                    'research.webAddress'
-                ])
-                .where(whereQuery);
+            queryBuilder
+                .select(['research.id', 'research.publicTitle', 'research.lastRefreshedOn', 'research.views', 'research.primarySponsor', 'research.webAddress'])
+                .where(whereQuery)
+                .orderBy('research.lastRefreshedOn', 'DESC');
             return paginate<Research>(queryBuilder, options);
         } else {
             const queryBuilder = this.researchesRepository.createQueryBuilder('research');
-            queryBuilder.select([
-                'research.id',
-                'research.publicTitle',
-                'research.lastRefreshedOn',
-                'research.views',
-                'research.primarySponsor',
-                'research.webAddress'
-            ])
+            queryBuilder
+                .select(['research.id', 'research.publicTitle', 'research.lastRefreshedOn', 'research.views', 'research.primarySponsor', 'research.webAddress'])
+                .orderBy('research.lastRefreshedOn', 'DESC');
             return paginate<Research>(queryBuilder, options);
         }
     }
