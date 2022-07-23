@@ -20,14 +20,14 @@ export class ResearchesController {
     async updateDB(): Promise<void> {
         await this.researchesService.updateAll();
     }
-    
+
     @Get(API_ENDPOINTS.RESEARCHES.STATS_BY_COUNTRY)
     @ApiOperation({
         summary: '[All] Get counts of the information in `Research` of the `Countries`',
-        description: 'Get counts of the information in `Research` based on the provide `Country` ISO codes'
+        description: 'Get counts of the information in `Research` based on the provide `Country` ISO codes, if Query is blank will select all researches',
     })
-    @ApiQuery({name: 'countryIsoCodes', description: 'Country ISO codes', type: [String]})
-    @ApiResponse({type: ResponseStatsByCountry})
+    @ApiQuery({ name: 'countryIsoCodes', description: 'Country ISO codes', type: [String], required: false })
+    @ApiResponse({ type: ResponseStatsByCountry })
     async statsByCountry(@Query('countryIsoCodes') countriesIsoCodes: string[]) {
         return await this.researchesService.statsByCountry(countriesIsoCodes);
     }

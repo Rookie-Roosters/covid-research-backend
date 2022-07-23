@@ -15,6 +15,7 @@ import { StatisticsService } from './statistics.service';
 import { CovidInfoService } from '@covid-info/covid-info.service';
 import { ResponseStatisticsDto, ResponseStatsByCountry } from '@researches/dto/responses';
 import { CovidInfoDto } from '@covid-info/dto/covid-info.dto';
+import globalStats from '../jsons/global-stats.json';
 
 @Injectable()
 export class ResearchesService {
@@ -212,52 +213,62 @@ export class ResearchesService {
     }
 
     async statsByCountry(countriesIsoCodes: string[]): Promise<ResponseStatsByCountry[]> {
-        let countryStatistics: {isoCode: string, covidInfo: CovidInfoDto, statistics: ResponseStatisticsDto}[] = await Promise.all(
-            countriesIsoCodes.map(async (countryIsoCode) => {
-                const covidInfo = await this.covidInfoService.findOne(countryIsoCode);
-                if (covidInfo) {
-                    const country = await this.countriesRepository.findOne({
-                        where: {
-                            covidInfo: {
-                                iso_code: covidInfo.iso_code,
+        if (!countriesIsoCodes) {
+            let countryStatistics: { isoCode: string; covidInfo: CovidInfoDto; statistics: ResponseStatisticsDto }[] = [];
+            countryStatistics.push({
+                covidInfo: null,
+                isoCode: '',
+                statistics: globalStats,
+            });
+            return countryStatistics;
+        } else {
+            let countryStatistics: { isoCode: string; covidInfo: CovidInfoDto; statistics: ResponseStatisticsDto }[] = await Promise.all(
+                countriesIsoCodes.map(async (countryIsoCode) => {
+                    const covidInfo = await this.covidInfoService.findOne(countryIsoCode);
+                    if (covidInfo) {
+                        const country = await this.countriesRepository.findOne({
+                            where: {
+                                covidInfo: {
+                                    iso_code: covidInfo.iso_code,
+                                },
                             },
-                        },
-                    });
-                    let statistics: ResponseStatisticsDto = undefined;
-                    if (country) {
-                        const researches = (
-                            await this.researchCountriesRepository.find({
-                                select: {
-                                    research: {
-                                        id: true,
+                        });
+                        let statistics: ResponseStatisticsDto = undefined;
+                        if (country) {
+                            const researches = (
+                                await this.researchCountriesRepository.find({
+                                    select: {
+                                        research: {
+                                            id: true,
+                                        },
                                     },
-                                },
-                                where: {
-                                    country: {
-                                        id: country.id,
+                                    where: {
+                                        country: {
+                                            id: country.id,
+                                        },
                                     },
-                                },
-                                relations: {
-                                    research: true,
-                                },
-                            })
-                        ).map((researchCountry) => researchCountry.research.id);
-                        if (researches.length > 0) statistics = await this.statisticsService.statistics(researches);
+                                    relations: {
+                                        research: true,
+                                    },
+                                })
+                            ).map((researchCountry) => researchCountry.research.id);
+                            if (researches.length > 0) statistics = await this.statisticsService.statistics(researches);
+                        }
+                        return {
+                            isoCode: covidInfo.iso_code,
+                            covidInfo: covidInfo,
+                            statistics,
+                        };
                     }
-                    return {
-                        isoCode: covidInfo.iso_code,
-                        covidInfo: covidInfo,
-                        statistics,
-                    };
-                }
-            }),
-        );
-        while (countryStatistics.findIndex((value) => value == undefined) != -1) {
-            countryStatistics.splice(
-                countryStatistics.findIndex((value) => value == undefined),
-                1,
+                }),
             );
+            while (countryStatistics.findIndex((value) => value == undefined) != -1) {
+                countryStatistics.splice(
+                    countryStatistics.findIndex((value) => value == undefined),
+                    1,
+                );
+            }
+            return countryStatistics;
         }
-        return countryStatistics;
     }
 }
