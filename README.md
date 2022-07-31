@@ -1,6 +1,4 @@
-<p align="center">
-![](documents\images\COGLI_Logotype.png)
-</p>
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/COGLI_Logotype.png)
 
 Propuesta para el track: Saruman - Research About Covid-19
 
@@ -39,29 +37,29 @@ Los investigadores son personas que recaban información para realizar un estudi
 
 ### Comportamientos
 
-- Recaban información
-- Realizan investigaciones
-- Analizan los datos más importantes
-- Toman decisiones en base a información
-- Comparten los resultados de las investigaciones
-- Desarrollan las investigaciones en grupos de personas
-- Publican sus resultados y conclusiones en medios de divulgación científica
+-   Recaban información
+-   Realizan investigaciones
+-   Analizan los datos más importantes
+-   Toman decisiones en base a información
+-   Comparten los resultados de las investigaciones
+-   Desarrollan las investigaciones en grupos de personas
+-   Publican sus resultados y conclusiones en medios de divulgación científica
 
 ### Demografía
 
-- Viven en todo el mundo
-- Manejan como idioma universal el inglés
-- Existen de todas las edades, aunque su mayoría son profesionales
-- Principalmente del sector de salud
+-   Viven en todo el mundo
+-   Manejan como idioma universal el inglés
+-   Existen de todas las edades, aunque su mayoría son profesionales
+-   Principalmente del sector de salud
 
 ### Necesidades y Objetivos
 
-- Recabar la información más precisa
-- Realizar las investigaciones en un tiempo razonable
-- Entregar resultados confiables
-- Tener una bibliografía de las fuentes consultadas
-- Buscar datos en todo el mundo
-- Compartir sus resultados
+-   Recabar la información más precisa
+-   Realizar las investigaciones en un tiempo razonable
+-   Entregar resultados confiables
+-   Tener una bibliografía de las fuentes consultadas
+-   Buscar datos en todo el mundo
+-   Compartir sus resultados
 
 ## Personal de Salud
 
@@ -69,28 +67,27 @@ El personal de salud son aquellas personas que se dedican al cuidado directo de 
 Sienten una gran pasión por ayudar y serles útil a las personas.
 Trabajan arduamente durante varias horas al día, algunas veces sin descanso.
 
-
 ### Comportamientos
 
-- Buscan la información más actualizada para su capacitación
-- Aplican los resultados de las búsquedas en los pacientes
-- Son responsable del tratamiento que le dan a las personas
-- Comunican sus conocimientos con otras personas
-- Son personas éticas
+-   Buscan la información más actualizada para su capacitación
+-   Aplican los resultados de las búsquedas en los pacientes
+-   Son responsable del tratamiento que le dan a las personas
+-   Comunican sus conocimientos con otras personas
+-   Son personas éticas
 
 ### Demografía
 
-- Viven en todo el mundo
-- Cuentan con una licenciatura o doctorado
-- Trabajan en hospitales o centros de salud
-- Cuentan con experiencia sobre cómo tratar a un paciente
+-   Viven en todo el mundo
+-   Cuentan con una licenciatura o doctorado
+-   Trabajan en hospitales o centros de salud
+-   Cuentan con experiencia sobre cómo tratar a un paciente
 
 ### Necesidades y Objetivos
 
-- Obtener la información más actualizada
-- Brindar el mejor tratamiento a los pacientes
-- Ser claros y honestos sobre los resultados de sus investigaciones
-- Contar la información más confiable
+-   Obtener la información más actualizada
+-   Brindar el mejor tratamiento a los pacientes
+-   Ser claros y honestos sobre los resultados de sus investigaciones
+-   Contar la información más confiable
 
 ## Público en General
 
@@ -99,25 +96,25 @@ Sus estilos de vida pueden ser muy variados, pero mayoritariamente trabajan para
 
 ### Comportamientos
 
-- Tienen el interés de estar informados
-- Realizan investigaciones para proyectos propios
-- Sintetizan la información para darla a conocer a otras personas
-- Desean extender su conocimiento sobre el tema
-- Buscan información en internet globalmente
+-   Tienen el interés de estar informados
+-   Realizan investigaciones para proyectos propios
+-   Sintetizan la información para darla a conocer a otras personas
+-   Desean extender su conocimiento sobre el tema
+-   Buscan información en internet globalmente
 
 ### Demografía
 
-- Viven en todo el mundo
-- Son personas que en su mayoría son adultos
-- La gran parte cuentan con licenciatura en adelante
+-   Viven en todo el mundo
+-   Son personas que en su mayoría son adultos
+-   La gran parte cuentan con licenciatura en adelante
 
 ### Necesidades y Objetivos
 
-- Contar con la información más verídica
-- Tener las últimas actualizaciones
-- Realizar investigaciones en un periodo corto de tiempo
-- Almacenar los datos investigados en un repositorio
-- Que la información sea entendible
+-   Contar con la información más verídica
+-   Tener las últimas actualizaciones
+-   Realizar investigaciones en un periodo corto de tiempo
+-   Almacenar los datos investigados en un repositorio
+-   Que la información sea entendible
 
 # Solución
 
@@ -132,162 +129,170 @@ Al ser una aplicación que permite ahorrar tiempo obteniendo los mejores resulta
 # Ideas
 
 Para desarrollar el prototipo del track se tienen las siguientes ideas del lado del servidor:
-- La información de las investigaciones será recabada automáticamente de la página oficial de la OMS https://trialsearch.who.int utilizando técnicas de web scraping.
-- Se obtendrá la información de casos actuales, muertes, personas hospitalizadas, número de vacunas aplicadas, entre otros del Covid 19 en varios países del mundo https://github.com/owid/covid-19-data/tree/master/public/data
-- Se procesarán todos los datos anteriores y se guardarán en una base de datos.
-- Se creará una API documentada para que cualquier persona pueda obtener información sobre las investigaciones y los datos del Covid 19.
-- La aplicación se subirá a un servidor donde será desplegada para que con una URL cualquier persona del mundo pueda acceder a ella.
+
+-   La información de las investigaciones será recabada automáticamente de la página oficial de la OMS https://trialsearch.who.int utilizando técnicas de web scraping.
+-   Se obtendrá la información de casos actuales, muertes, personas hospitalizadas, número de vacunas aplicadas, entre otros del Covid 19 en varios países del mundo https://github.com/owid/covid-19-data/tree/master/public/data
+-   Se procesarán todos los datos anteriores y se guardarán en una base de datos.
+-   Se creará una API documentada para que cualquier persona pueda obtener información sobre las investigaciones y los datos del Covid 19.
+-   La aplicación se subirá a un servidor donde será desplegada para que con una URL cualquier persona del mundo pueda acceder a ella.
 
 Del lado del cliente se creará una página web que contenga:
-- Un buscador general para las investigaciones
-- Filtros de búsqueda para obtener resultados más precisos
-- Un mapa interactivo que al seleccionar un país funcionará como filtro y al posicionar el mouse sobre uno de estos proporcionará la información de casos de Covid 19, muertes, personas hospitalizadas, número de vacunas, número de investigaciones, entre otros
-- Búsquedas predefinidas
-- Gráficas que muestran la información sintetizada sobre la búsqueda
-- Información de cada una de las investigaciones con las siguientes datos:
-  - Un mapa de los países que participaron en la investigación
-  - Información sobre el Covid 19 de cada país
-  - La liga para redirigir a la página de la investigación y de los resultados
-  - Un contador de número de personas que han consultado la investigación
-- La opción de crear un usuario e iniciar sesión para contar con los marcadores e historial de búsqueda en cualquier momento y lugar
-- La opción de poner marcadores a cada una de las investigaciones y así separarlas por grupos y consultarlas después
-- Notificaciones que aparecerán si hubo una actualización en la información de las investigaciones que se encuentran en un marcador
-- Un historial de búsqueda
-- Un historial de todas las modificaciones que han tenido cada una de las investigaciones
-- Un botón que te dirigirá a la página para que el usuario sepa dónde subir su investigación y cómo debe realizarlo
-- Las últimas noticas que hay sobre el Covid 19
-- Un botón de ayuda que mostrará un tutorial interactivo que guiará a la persona en el uso de la aplicación.
-- La opción de descargar un XML o CSV para descargar los datos.
+
+-   Un buscador general para las investigaciones
+-   Filtros de búsqueda para obtener resultados más precisos
+-   Un mapa interactivo que al seleccionar un país funcionará como filtro y al posicionar el mouse sobre uno de estos proporcionará la información de casos de Covid 19, muertes, personas hospitalizadas, número de vacunas, número de investigaciones, entre otros
+-   Búsquedas predefinidas
+-   Gráficas que muestran la información sintetizada sobre la búsqueda
+-   Información de cada una de las investigaciones con las siguientes datos:
+    -   Un mapa de los países que participaron en la investigación
+    -   Información sobre el Covid 19 de cada país
+    -   La liga para redirigir a la página de la investigación y de los resultados
+    -   Un contador de número de personas que han consultado la investigación
+-   La opción de crear un usuario e iniciar sesión para contar con los marcadores e historial de búsqueda en cualquier momento y lugar
+-   La opción de poner marcadores a cada una de las investigaciones y así separarlas por grupos y consultarlas después
+-   Notificaciones que aparecerán si hubo una actualización en la información de las investigaciones que se encuentran en un marcador
+-   Un historial de búsqueda
+-   Un historial de todas las modificaciones que han tenido cada una de las investigaciones
+-   Un botón que te dirigirá a la página para que el usuario sepa dónde subir su investigación y cómo debe realizarlo
+-   Las últimas noticas que hay sobre el Covid 19
+-   Un botón de ayuda que mostrará un tutorial interactivo que guiará a la persona en el uso de la aplicación.
+-   La opción de descargar un XML o CSV para descargar los datos.
 
 # Gráficas
 
 En base en la información obtenida de la página de la OMS https://trialsearch.who.int se agregarán las siguientes gráficas a la página, que su información cambiará dinámicamente en base a la búsqueda del usuario, a los filtros o al país seleccionado y éste podrá elegir si la información será representada en un gráfico de barras, pastel y de líneas:
 
 Gráficas con información de fechas:
-- Número de investigaciones por mes de actualización
-- Número de investigaciones por año de actualización
-- Número de investigaciones por mes de registro
-- Número de investigaciones por año de registro
-- Número de investigaciones por mes de inscripción
-- Número de investigaciones por año de inscripción
+
+-   Número de investigaciones por mes de actualización
+-   Número de investigaciones por año de actualización
+-   Número de investigaciones por mes de registro
+-   Número de investigaciones por año de registro
+-   Número de investigaciones por mes de inscripción
+-   Número de investigaciones por año de inscripción
 
 Gráficas con información de inclusión:
-- Número de investigaciones por edad de inclusión mínima
-  - Embarazo
-  - Edad menor a 1 año
-  - Edad menor a 10 años
-  - Edad menor a 20 años
-  - Edad menor a 30 años
-  - Edad menor a 40 años
-  - Edad menor a 50 años
-  - No aplica
-- Número de investigaciones por edad de inclusión máxima
-  - Embarazo
-  - Edad menor a 1 año
-  - Edad menor a 10 años
-  - Edad menor a 20 años
-  - Edad menor a 30 años
-  - Edad menor a 40 años
-  - Edad menor a 50 años
-  - No aplica
-- Número de investigaciones por género de inclusión
-  - Ambos
-  - Hombres
-  - Mujeres
+
+-   Número de investigaciones por edad de inclusión mínima
+    -   Embarazo
+    -   Edad menor a 1 año
+    -   Edad menor a 10 años
+    -   Edad menor a 20 años
+    -   Edad menor a 30 años
+    -   Edad menor a 40 años
+    -   Edad menor a 50 años
+    -   No aplica
+-   Número de investigaciones por edad de inclusión máxima
+    -   Embarazo
+    -   Edad menor a 1 año
+    -   Edad menor a 10 años
+    -   Edad menor a 20 años
+    -   Edad menor a 30 años
+    -   Edad menor a 40 años
+    -   Edad menor a 50 años
+    -   No aplica
+-   Número de investigaciones por género de inclusión
+    -   Ambos
+    -   Hombres
+    -   Mujeres
 
 Gráficas con información del estado de la investigación:
-- Número de investigaciones por estado de reclutamiento
-  - Reclutamiento
-  - No reclutamiento
-  - Autorizado
-  - No disponible
-- Número de investigaciones que cuentan, o no, con otros registros
-- Número de investigaciones por fase
-  - Fase 1
-  - Fase 2
-  - Fase 3
-  - Fase 4
-  - No aplicable
-  - Otra
+
+-   Número de investigaciones por estado de reclutamiento
+    -   Reclutamiento
+    -   No reclutamiento
+    -   Autorizado
+    -   No disponible
+-   Número de investigaciones que cuentan, o no, con otros registros
+-   Número de investigaciones por fase
+    -   Fase 1
+    -   Fase 2
+    -   Fase 3
+    -   Fase 4
+    -   No aplicable
+    -   Otra
 
 Gráficas con otra información
-- Número de investigaciones que cuentan, o no, con resultados
-- Número de investigaciones por fuente
-- Número de investigaciones por tipo de estudio
-- Número de actualizaciones por grupos de tamaño objetivo
+
+-   Número de investigaciones que cuentan, o no, con resultados
+-   Número de investigaciones por fuente
+-   Número de investigaciones por tipo de estudio
+-   Número de actualizaciones por grupos de tamaño objetivo
 
 Gráficas por país
-- Número de investigaciones por país
-- Número de muertes
-- Número de contagios
-- Número de gente vacunada
-- Población
-- Densidad de población
-- Expectativa de vida
+
+-   Número de investigaciones por país
+-   Número de muertes
+-   Número de contagios
+-   Número de gente vacunada
+-   Población
+-   Densidad de población
+-   Expectativa de vida
 
 # Tecnologías
 
-| Tecnología             | Descripción                                                                                                                                                                       | Implementación                                                                                                                                                          |
-|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Angular               | Es una plataforma de desarrollo creada sobre TypeScript para crear aplicaciones web escalables y basadas en componentes.                                                          | Esta se utilizará para desarrollar toda la lógica y los componentes del frontend de la aplicación, además de que permite crear aplicaciones con server side rendering.  |
-| NestJS                | Es un framework creado para crear aplicaciones del servidor eficientes, confiables y escalables.                                                                                  | En el prototipo funcionará para administrar el servidor y todas las peticiones realizadas por la API y el frontend, y nos permitirá realizar una aplicación serverless. |
-| Microsoft SQL Server  | Base de datos relacional desarrollada por Microsoft.                                                                                                                              | Esta se utilizará para almacenar todos los datos que serán requeridos por la aplicación de manera coherente y sin redundancia.                                          |
-| TypeORM               | Librería creada sobre TypeScript que hace fácil unir aplicaciones realizadas sobre este mismo lenguaje y base de datos relacionales.                                              | La librería nos ayudará a conectar la base de datos con el servidor y a realizar todas las consultas.                                                                   |
-| Azure                 | Servicio de computación en la nube operado por Microsoft que ofrece una gran cantidad de servicios en la nube.                                                                    | Este será utilizado para almacenar, administrar y desplegar la aplicación desde la nube para que esté disponible en internet.                                           |
-| Google Maps API       | Plataforma que permite a los desarrolladores incluir las funciones de los mapas de Google en sus aplicaciones.                                                                    | Se utilizará para mostrar un mapa en la aplicación y desplegar más información sobre los casos de Covid 19 y las investigaciones por país.                              |
-| PrimeNG               | Framework de diseño que le permite al desarrollador crear fácilmente una interfaz de usuario sencilla, estética y dinámica.                                                       | Este se utilizará para darle el diseño a la aplicación y así otorgar a los usuarios una mejor experiencia al utilizar el sitio.                                         |
-| Swagger               | Componente que permite al desarrollador documentar de forma sencilla proyectos de NestJS, para que así el código pueda ser fácilmente entendido por desarrolladores en el futuro. | La aplicación hará uso de este para realizar la API y documentar esta.                                                                                                  |
+| Tecnología           | Descripción                                                                                                                                                                       | Implementación                                                                                                                                                          |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Angular              | Es una plataforma de desarrollo creada sobre TypeScript para crear aplicaciones web escalables y basadas en componentes.                                                          | Esta se utilizará para desarrollar toda la lógica y los componentes del frontend de la aplicación, además de que permite crear aplicaciones con server side rendering.  |
+| NestJS               | Es un framework creado para crear aplicaciones del servidor eficientes, confiables y escalables.                                                                                  | En el prototipo funcionará para administrar el servidor y todas las peticiones realizadas por la API y el frontend, y nos permitirá realizar una aplicación serverless. |
+| Microsoft SQL Server | Base de datos relacional desarrollada por Microsoft.                                                                                                                              | Esta se utilizará para almacenar todos los datos que serán requeridos por la aplicación de manera coherente y sin redundancia.                                          |
+| TypeORM              | Librería creada sobre TypeScript que hace fácil unir aplicaciones realizadas sobre este mismo lenguaje y base de datos relacionales.                                              | La librería nos ayudará a conectar la base de datos con el servidor y a realizar todas las consultas.                                                                   |
+| Azure                | Servicio de computación en la nube operado por Microsoft que ofrece una gran cantidad de servicios en la nube.                                                                    | Este será utilizado para almacenar, administrar y desplegar la aplicación desde la nube para que esté disponible en internet.                                           |
+| Google Maps API      | Plataforma que permite a los desarrolladores incluir las funciones de los mapas de Google en sus aplicaciones.                                                                    | Se utilizará para mostrar un mapa en la aplicación y desplegar más información sobre los casos de Covid 19 y las investigaciones por país.                              |
+| PrimeNG              | Framework de diseño que le permite al desarrollador crear fácilmente una interfaz de usuario sencilla, estética y dinámica.                                                       | Este se utilizará para darle el diseño a la aplicación y así otorgar a los usuarios una mejor experiencia al utilizar el sitio.                                         |
+| Swagger              | Componente que permite al desarrollador documentar de forma sencilla proyectos de NestJS, para que así el código pueda ser fácilmente entendido por desarrolladores en el futuro. | La aplicación hará uso de este para realizar la API y documentar esta.                                                                                                  |
 
 # Wireframes
 
 Investigaciones y estadísticas por país
 
-![](documents\images\Imagen2.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen2.png)
 
 Buscador global de investigaciones
 
-![](documents\images\Imagen3.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen3.png)
 
 Información completa de cada investigación
 
-![](documents\images\Imagen4.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen4.png)
 
 Dashboard con gráficas y estadísticas
 
-![](documents\images\Imagen5.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen5.png)
 
 Buscador de noticias relacionadas con el Covid-19
 
-![](documents\images\Imagen6.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen6.png)
 
 Marcadores con investigaciones guardadas por el usuario
 
-![](documents\images\Imagen7.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen7.png)
 
 ## Capturas de Pantalla
+
 Diagrama Entidad Relación de la Base de Datos
 
-![](documents\images\Imagen8.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen8.png)
 
 Documentación de la API
 
-![](documents\images\Imagen9.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen9.png)
 
 Información acerca de un endpoint en específico
 
-![](documents\images\Imagen10.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen10.png)
 
 Pantalla de Inicio
 
-![](documents\images\Imagen11.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen11.png)
 
 Pantalla de Marcadores
 
-![](documents\images\Imagen12.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen12.png)
 
 Pantalla de Investigación
 
-![](documents\images\Imagen13.png)
+![](https://raw.githubusercontent.com/Rookie-Roosters/covid-research-backend/main/documents/images/Imagen13.png)
 
 # Futuro de la Aplicación
 
