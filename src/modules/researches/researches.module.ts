@@ -1,26 +1,35 @@
 import { CsvModule } from '@csv/csv.module';
 import { Module } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CovidInfoModule } from '../covid-info/covid-info.module';
-import { PhasesController, RecruitmentStatusesController, SourceRegistersController, StudyTypesController, TargetSizeGroupsController } from './controllers';
+import {
+    PhasesController,
+    RecruitmentStatusesController,
+    SearchController,
+    SourceRegistersController,
+    StudyTypesController,
+    TargetSizeGroupsController,
+} from './controllers';
 import { Country, Phase, RecruitmentStatus, Research, ResearchCountry, SourceRegister, StudyType, TargetSize, TargetSizeGroup } from './entities';
-import { ResearchesController } from './researches.controller';
-import { ResearchesService } from './researches.service';
+import { ResearchesController } from './controllers/researches.controller';
+import { ResearchesService } from './services/researches.service';
 import {
     CountriesService,
     PhasesService,
     RecruitmentStatusesService,
     ResearchCountriesService,
+    SearchService,
     SourceRegistersService,
     StudyTypesService,
     TargetSizeGroupsService,
     TargetSizesService,
 } from './services';
+import { StatisticsService } from './services/statistics.service';
+import { CovidInfo } from '@covid-info/entities/covid-info.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Research, SourceRegister, RecruitmentStatus, TargetSize, TargetSizeGroup, StudyType, Phase, Country, ResearchCountry]),
+        TypeOrmModule.forFeature([Research, SourceRegister, RecruitmentStatus, TargetSize, TargetSizeGroup, StudyType, Phase, Country, ResearchCountry, CovidInfo]),
         CsvModule,
         CovidInfoModule,
     ],
@@ -31,6 +40,7 @@ import {
         SourceRegistersController,
         StudyTypesController,
         TargetSizeGroupsController,
+        SearchController,
     ],
     providers: [
         ResearchesService,
@@ -42,6 +52,9 @@ import {
         TargetSizeGroupsService,
         CountriesService,
         ResearchCountriesService,
+        SearchService,
+        StatisticsService,
     ],
+    exports: [ResearchesService],
 })
 export class ResearchesModule {}

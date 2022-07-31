@@ -1,1 +1,0 @@
-export * from './searches.service';

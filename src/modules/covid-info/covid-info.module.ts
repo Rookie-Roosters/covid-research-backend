@@ -6,9 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CsvModule } from '../csv/csv.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CovidInfo]), CsvModule],
-  controllers: [CovidInfoController],
-  providers: [CovidInfoService],
-  exports: [CovidInfoService]
+    imports: [TypeOrmModule.forFeature([CovidInfo]), CsvModule],
+    controllers: [CovidInfoController],
+    providers: [CovidInfoService],
+    exports: [CovidInfoService],
 })
 export class CovidInfoModule {}

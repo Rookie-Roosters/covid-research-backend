@@ -1,4 +1,5 @@
 export const API_RESOURCES = {
+    AUTHENTICATION: 'authentication',
     BOOKMARKS: 'bookmarks',
     RESEARCHES: 'researches',
     RESEARCHES_RESOURCES: {
@@ -9,23 +10,34 @@ export const API_RESOURCES = {
         TARGET_SIZE_GROUPS: 'target-size-groups',
         TARGET_SIZES: 'target-sizes',
     },
-    SEARCHES: 'searches',
+    SEARCH: 'search',
     USERS: 'users',
+    HISTORIES: 'search-records',
 };
 
 export const DEFAULT_API_PATHS = {
     BY_ID: ':id',
+    USER: 'user',
 };
 
 export const API_ENDPOINTS = {
+    AUTHENTICATION: {
+        BASE_PATH: `/${API_RESOURCES.AUTHENTICATION}`,
+        SIGN_UP: 'sign-up',
+        LOG_IN: 'log-in',
+    },
     BOOKMARKS: {
         BASE_PATH: `/${API_RESOURCES.BOOKMARKS}`,
         BY_ID: DEFAULT_API_PATHS.BY_ID,
+        RESEARCH_BY_ID: `research/${DEFAULT_API_PATHS.BY_ID}`,
+        USER: DEFAULT_API_PATHS.USER,
     },
     RESEARCHES: {
         BASE_PATH: `/${API_RESOURCES.RESEARCHES}`,
         BY_ID: DEFAULT_API_PATHS.BY_ID,
         UPDATE_DB: '/update-db',
+        STATS_BY_COUNTRY: '/stats-by-country',
+        WORLD_STATS: '/world-stats',
         PHASES: {
             BASE_PATH: `/${API_RESOURCES.RESEARCHES_RESOURCES.PHASES}`,
         },
@@ -45,12 +57,16 @@ export const API_ENDPOINTS = {
             BASE_PATH: `/${API_RESOURCES.RESEARCHES_RESOURCES.TARGET_SIZES}`,
         },
     },
-    SEARCHES: {
-        BASE_PATH: `/${API_RESOURCES.SEARCHES}`,
-        BY_ID: DEFAULT_API_PATHS.BY_ID,
+    SEARCH: {
+        BASE_PATH: `/${API_RESOURCES.SEARCH}`,
     },
     USERS: {
         BASE_PATH: `/${API_RESOURCES.USERS}`,
         BY_ID: DEFAULT_API_PATHS.BY_ID,
+    },
+    HISTORIES: {
+        BASE_PATH: `/${API_RESOURCES.HISTORIES}`,
+        BY_ID: DEFAULT_API_PATHS.BY_ID,
+        USER: DEFAULT_API_PATHS.USER,
     },
 };

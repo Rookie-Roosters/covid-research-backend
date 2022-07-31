@@ -7,3 +7,4 @@ export * from './target-size-group.dto';
 export * from './target-size.dto';
 export * from './country.dto';
 export * from './research-country.dto';
+export * from './filters.dto';

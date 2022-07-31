@@ -1,11 +1,14 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { UsersService } from '@users/services';
 import { AppModule } from './app.module';
 declare const module: any;
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    app.enableCors();
+
     app.useGlobalPipes(
         new ValidationPipe({
             whitelist: true,
@@ -27,6 +30,9 @@ async function bootstrap() {
 
     await app.listen(3000);
     console.log(`Server started at: ${await app.getUrl()}`);
+
+    const usersService = app.get(UsersService);
+    usersService.syncUserRoles();
 
     if (module.hot) {
         module.hot.accept();

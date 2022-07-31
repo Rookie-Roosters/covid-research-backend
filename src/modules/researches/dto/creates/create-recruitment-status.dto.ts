@@ -1,3 +1,3 @@
 import { RecruitmentStatusDto } from '../recruitment-status.dto';
 
-export class CreateRecruitmentStatusDto extends RecruitmentStatusDto{}
+export class CreateRecruitmentStatusDto extends RecruitmentStatusDto {}

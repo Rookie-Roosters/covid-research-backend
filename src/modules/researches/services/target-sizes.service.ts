@@ -35,7 +35,7 @@ export class TargetSizesService {
             targetSize = await this.targetSizeRepository.save({
                 count: createTargetSizeDto.count,
                 research: research,
-                targetSizeGroup: targetSizeGroup ? targetSizeGroup.id : undefined,
+                targetSizeGroup: targetSizeGroup,
             });
         }
         return targetSize;
@@ -62,7 +62,7 @@ export class TargetSizesService {
                 },
             }),
         );
-        if(res) return res as unknown as ResponseTargetSizeDto[];
+        if (res) return res as unknown as ResponseTargetSizeDto[];
     }
 
     private async findByValues(researchId: string, targetSizeGroup?: number): Promise<TargetSize> {

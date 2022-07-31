@@ -6,3 +6,6 @@ export * from './response-study-type.dto';
 export * from './response-target-size-group.dto';
 export * from './response-target-size.dto';
 export * from './response-research-country.dto';
+export * from './response-statistic.dto';
+export * from './response-stats-by-country.dto';
+export * from './response-world-stats.dto';

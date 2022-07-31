@@ -1,0 +1,121 @@
+{
+    "count": 16717,
+    "views": 2,
+    "inclusionGender": {
+        "both": 263,
+        "female": 8,
+        "male": 4,
+        "null": 42
+    },
+    "recruitmentStatus": {
+        "authorised": 0,
+        "notAvailable": 0,
+        "notRecruiting": 204,
+        "null": 0,
+        "recruiting": 113
+    },
+    "inclusionAgeMax": {
+        "inPregnancy": 0,
+        "noLimit": 98,
+        "null": 50,
+        "over50Years": 129,
+        "under10Years": 1,
+        "under1Year": 11,
+        "under20Years": 18,
+        "under30Years": 5,
+        "under40Years": 2,
+        "under50Years": 3
+    },
+    "inclusionAgeMin": {
+        "inPregnancy": 0,
+        "noLimit": 12,
+        "null": 16,
+        "over50Years": 16,
+        "under10Years": 17,
+        "under1Year": 6,
+        "under20Years": 229,
+        "under30Years": 15,
+        "under40Years": 4,
+        "under50Years": 2
+    },
+    "phase": {
+        "notApplicable": 57,
+        "null": 102,
+        "other": 0,
+        "phase0": 6,
+        "phase1": 37,
+        "phase2": 81,
+        "phase3": 41,
+        "phase4": 27
+    },
+    "result": {
+        "with": 24,
+        "without": 293
+    },
+    "sourceRegister": [
+        {
+            "name": "ClinicalTrials.gov",
+            "count": 9823
+        },
+        {
+            "name": "CTRI",
+            "count": 1947
+        },
+        {
+            "name": "ChiCTR",
+            "count": 1031
+        },
+        {
+            "name": "IRCT",
+            "count": 893
+        },
+        {
+            "name": "EU Clinical Trials Register",
+            "count": 687
+        }
+    ],
+    "studyType": [
+        {
+            "name": "interventional",
+            "count": 9610
+        },
+        {
+            "name": "observational",
+            "count": 5616
+        },
+        {
+            "name": "interventional clinical trial of medicinal product",
+            "count": 687
+        },
+        {
+            "name": "observational [patient registry]",
+            "count": 462
+        },
+        {
+            "name": "intervention",
+            "count": 160
+        }
+    ],
+    "targetSize": [
+        {
+            "name": "null",
+            "count": 735886189
+        },
+        {
+            "name": "case series",
+            "count": 523913
+        },
+        {
+            "name": "college students",
+            "count": 150000
+        },
+        {
+            "name": "for the stage in risk group.",
+            "count": 150000
+        },
+        {
+            "name": "control group",
+            "count": 104223
+        }
+    ]
+}
